@@ -1,9 +1,15 @@
-import pg from "pg";
-import { drizzle } from "drizzle-orm/node-postgres";
+import mysql from "mysql2/promise";
+import { drizzle } from "drizzle-orm/mysql2";
 import { books, events, blogPosts, podcasts, livestreams, searchIndex } from "@shared/schema";
 import { sql } from "drizzle-orm";
 
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const pool = mysql.createPool({
+  host: process.env.RDS_HOST,
+  port: Number(process.env.RDS_PORT) || 3306,
+  user: process.env.RDS_USER,
+  password: process.env.RDS_PASSWORD,
+  database: process.env.RDS_DATABASE,
+});
 const db = drizzle(pool);
 
 async function seed() {

@@ -1,138 +1,138 @@
 import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, integer, boolean, timestamp, serial, index } from "drizzle-orm/pg-core";
+import { mysqlTable, text, varchar, int, boolean, timestamp, serial, index, json } from "drizzle-orm/mysql-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
+export const users = mysqlTable("users", {
   id: serial("id").primaryKey(),
-  username: text("username").notNull().unique(),
+  username: varchar("username", { length: 255 }).notNull().unique(),
   password: text("password").notNull(),
-  email: text("email").notNull().unique(),
-  fullName: text("full_name").notNull(),
-  role: text("role").notNull().default("member"),
-  phone: text("phone"),
-  location: text("location"),
+  email: varchar("email", { length: 255 }).notNull().unique(),
+  fullName: varchar("full_name", { length: 255 }).notNull(),
+  role: varchar("role", { length: 50 }).notNull().default("member"),
+  phone: varchar("phone", { length: 50 }),
+  location: varchar("location", { length: 255 }),
   avatarUrl: text("avatar_url"),
   subscribed: boolean("subscribed").notNull().default(false),
-  resetToken: text("reset_token"),
+  resetToken: varchar("reset_token", { length: 255 }),
   resetTokenExpiry: timestamp("reset_token_expiry"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const books = pgTable("books", {
+export const books = mysqlTable("books", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  author: text("author").notNull().default("M.Devadas Ayyagaru"),
-  language: text("language").notNull().default("English"),
-  category: text("category").notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
+  author: varchar("author", { length: 255 }).notNull().default("M.Devadas Ayyagaru"),
+  language: varchar("language", { length: 50 }).notNull().default("English"),
+  category: varchar("category", { length: 255 }).notNull(),
   description: text("description"),
   coverImage: text("cover_image"),
   contentUrl: text("content_url"),
-  tags: text("tags").array(),
+  tags: json("tags").$type<string[]>(),
 });
 
-export const events = pgTable("events", {
+export const events = mysqlTable("events", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
   description: text("description"),
-  date: text("date").notNull(),
-  time: text("time"),
-  location: text("location").notNull(),
-  latitude: text("latitude"),
-  longitude: text("longitude"),
-  pastorName: text("pastor_name"),
+  date: varchar("date", { length: 50 }).notNull(),
+  time: varchar("time", { length: 50 }),
+  location: varchar("location", { length: 500 }).notNull(),
+  latitude: varchar("latitude", { length: 50 }),
+  longitude: varchar("longitude", { length: 50 }),
+  pastorName: varchar("pastor_name", { length: 255 }),
   posterImage: text("poster_image"),
   approved: boolean("approved").notNull().default(false),
-  tags: text("tags").array(),
+  tags: json("tags").$type<string[]>(),
 });
 
-export const prayerRequests = pgTable("prayer_requests", {
+export const prayerRequests = mysqlTable("prayer_requests", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email"),
-  phone: text("phone"),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }),
+  phone: varchar("phone", { length: 50 }),
   request: text("request").notNull(),
   isAnonymous: boolean("is_anonymous").notNull().default(false),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const blogPosts = pgTable("blog_posts", {
+export const blogPosts = mysqlTable("blog_posts", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
-  slug: text("slug").notNull().unique(),
+  title: varchar("title", { length: 500 }).notNull(),
+  slug: varchar("slug", { length: 500 }).notNull().unique(),
   content: text("content").notNull(),
   excerpt: text("excerpt"),
   coverImage: text("cover_image"),
-  author: text("author").notNull().default("Bible Mission"),
-  category: text("category").notNull().default("Devotional"),
+  author: varchar("author", { length: 255 }).notNull().default("Bible Mission"),
+  category: varchar("category", { length: 255 }).notNull().default("Devotional"),
   published: boolean("published").notNull().default(false),
-  tags: text("tags").array(),
+  tags: json("tags").$type<string[]>(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const podcasts = pgTable("podcasts", {
+export const podcasts = mysqlTable("podcasts", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
   description: text("description"),
   audioUrl: text("audio_url"),
-  duration: text("duration"),
-  episodeNumber: integer("episode_number"),
+  duration: varchar("duration", { length: 50 }),
+  episodeNumber: int("episode_number"),
   published: boolean("published").notNull().default(false),
-  tags: text("tags").array(),
-  category: text("category").default("Podcast"),
+  tags: json("tags").$type<string[]>(),
+  category: varchar("category", { length: 255 }).default("Podcast"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const livestreams = pgTable("livestreams", {
+export const livestreams = mysqlTable("livestreams", {
   id: serial("id").primaryKey(),
-  title: text("title").notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
   description: text("description"),
   streamUrl: text("stream_url"),
-  scheduledAt: text("scheduled_at"),
+  scheduledAt: varchar("scheduled_at", { length: 100 }),
   isLive: boolean("is_live").notNull().default(false),
-  pastorName: text("pastor_name"),
-  tags: text("tags").array(),
-  category: text("category").default("Livestream"),
+  pastorName: varchar("pastor_name", { length: 255 }),
+  tags: json("tags").$type<string[]>(),
+  category: varchar("category", { length: 255 }).default("Livestream"),
 });
 
-export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
+export const newsletterSubscriptions = mysqlTable("newsletter_subscriptions", {
   id: serial("id").primaryKey(),
-  email: text("email").notNull().unique(),
+  email: varchar("email", { length: 255 }).notNull().unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const pastorApplications = pgTable("pastor_applications", {
+export const pastorApplications = mysqlTable("pastor_applications", {
   id: serial("id").primaryKey(),
-  fullName: text("full_name").notNull(),
-  email: text("email").notNull(),
-  phone: text("phone").notNull(),
-  location: text("location").notNull(),
+  fullName: varchar("full_name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  phone: varchar("phone", { length: 50 }).notNull(),
+  location: varchar("location", { length: 255 }).notNull(),
   message: text("message"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const contactMessages = pgTable("contact_messages", {
+export const contactMessages = mysqlTable("contact_messages", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  email: text("email").notNull(),
-  subject: text("subject"),
+  name: varchar("name", { length: 255 }).notNull(),
+  email: varchar("email", { length: 255 }).notNull(),
+  subject: varchar("subject", { length: 500 }),
   message: text("message").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
 
-export const searchIndex = pgTable("search_index", {
+export const searchIndex = mysqlTable("search_index", {
   id: serial("id").primaryKey(),
-  sourceType: text("source_type").notNull(),
-  sourceId: integer("source_id").notNull(),
-  title: text("title").notNull(),
+  sourceType: varchar("source_type", { length: 50 }).notNull(),
+  sourceId: int("source_id").notNull(),
+  title: varchar("title", { length: 500 }).notNull(),
   description: text("description"),
-  author: text("author"),
-  category: text("category"),
-  tags: text("tags").array(),
-  language: text("language"),
+  author: varchar("author", { length: 255 }),
+  category: varchar("category", { length: 255 }),
+  tags: json("tags").$type<string[]>(),
+  language: varchar("language", { length: 50 }),
   imageUrl: text("image_url"),
-  slug: text("slug"),
-  date: text("date"),
+  slug: varchar("slug", { length: 500 }),
+  date: varchar("date", { length: 50 }),
   metadata: text("metadata"),
 }, (table) => [
   index("idx_search_source").on(table.sourceType, table.sourceId),
@@ -144,7 +144,6 @@ export const insertSearchIndexSchema = createInsertSchema(searchIndex).omit({ id
 export type InsertSearchIndex = z.infer<typeof insertSearchIndexSchema>;
 export type SearchIndexEntry = typeof searchIndex.$inferSelect;
 
-// Insert schemas
 export const insertUserSchema = createInsertSchema(users).omit({ id: true, resetToken: true, resetTokenExpiry: true, createdAt: true });
 export const insertBookSchema = createInsertSchema(books).omit({ id: true });
 export const insertEventSchema = createInsertSchema(events).omit({ id: true });
@@ -156,7 +155,6 @@ export const insertNewsletterSchema = createInsertSchema(newsletterSubscriptions
 export const insertPastorApplicationSchema = createInsertSchema(pastorApplications).omit({ id: true, createdAt: true });
 export const insertContactMessageSchema = createInsertSchema(contactMessages).omit({ id: true, createdAt: true });
 
-// Types
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertBook = z.infer<typeof insertBookSchema>;

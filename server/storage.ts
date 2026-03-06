@@ -14,11 +14,19 @@ import {
   type ContactMessage, type InsertContactMessage,
   type InsertSearchIndex, type SearchIndexEntry,
 } from "@shared/schema";
-import { drizzle } from "drizzle-orm/node-postgres";
-import { eq, ilike, or, desc, and, sql, arrayContains } from "drizzle-orm";
-import pg from "pg";
+import { drizzle } from "drizzle-orm/mysql2";
+import { eq, like, or, desc, and, sql } from "drizzle-orm";
+import mysql from "mysql2/promise";
 
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
+const pool = mysql.createPool({
+  host: process.env.RDS_HOST,
+  port: Number(process.env.RDS_PORT) || 3306,
+  user: process.env.RDS_USER,
+  password: process.env.RDS_PASSWORD,
+  database: process.env.RDS_DATABASE,
+  waitForConnections: true,
+  connectionLimit: 10,
+});
 const db = drizzle(pool);
 
 export interface IStorage {
@@ -71,6 +79,13 @@ export interface IStorage {
   rebuildSearchIndex(): Promise<void>;
 }
 
+async function insertAndReturn<T>(table: any, values: any): Promise<T> {
+  const result = await db.insert(table).values(values);
+  const insertId = (result as any)[0].insertId;
+  const [row] = await db.select().from(table).where(eq(table.id, insertId));
+  return row as T;
+}
+
 export class DatabaseStorage implements IStorage {
   async getUser(id: number): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
@@ -98,19 +113,19 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(user: InsertUser): Promise<User> {
-    const [created] = await db.insert(users).values(user).returning();
-    return created;
+    return insertAndReturn<User>(users, user);
   }
 
   async updateUser(id: number, data: Partial<InsertUser & { resetToken: string | null; resetTokenExpiry: Date | null; password: string }>): Promise<User | undefined> {
-    const [updated] = await db.update(users).set(data).where(eq(users.id, id)).returning();
+    await db.update(users).set(data).where(eq(users.id, id));
+    const [updated] = await db.select().from(users).where(eq(users.id, id));
     return updated;
   }
 
   async getBooks(query?: string, language?: string): Promise<Book[]> {
     let conditions = [];
     if (query) {
-      conditions.push(or(ilike(books.title, `%${query}%`), ilike(books.category, `%${query}%`)));
+      conditions.push(or(like(books.title, `%${query}%`), like(books.category, `%${query}%`)));
     }
     if (language) {
       conditions.push(eq(books.language, language));
@@ -127,8 +142,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createBook(book: InsertBook): Promise<Book> {
-    const [created] = await db.insert(books).values(book).returning();
-    return created;
+    return insertAndReturn<Book>(books, book);
   }
 
   async getEvents(approvedOnly = true): Promise<Event[]> {
@@ -144,13 +158,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createEvent(event: InsertEvent): Promise<Event> {
-    const [created] = await db.insert(events).values(event).returning();
-    return created;
+    return insertAndReturn<Event>(events, event);
   }
 
   async createPrayerRequest(req: InsertPrayerRequest): Promise<PrayerRequest> {
-    const [created] = await db.insert(prayerRequests).values(req).returning();
-    return created;
+    return insertAndReturn<PrayerRequest>(prayerRequests, req);
   }
 
   async getPrayerRequests(): Promise<PrayerRequest[]> {
@@ -170,8 +182,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createBlogPost(post: InsertBlogPost): Promise<BlogPost> {
-    const [created] = await db.insert(blogPosts).values(post).returning();
-    return created;
+    return insertAndReturn<BlogPost>(blogPosts, post);
   }
 
   async getPodcasts(publishedOnly = true): Promise<Podcast[]> {
@@ -182,8 +193,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createPodcast(podcast: InsertPodcast): Promise<Podcast> {
-    const [created] = await db.insert(podcasts).values(podcast).returning();
-    return created;
+    return insertAndReturn<Podcast>(podcasts, podcast);
   }
 
   async getLivestreams(): Promise<Livestream[]> {
@@ -191,18 +201,15 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createLivestream(ls: InsertLivestream): Promise<Livestream> {
-    const [created] = await db.insert(livestreams).values(ls).returning();
-    return created;
+    return insertAndReturn<Livestream>(livestreams, ls);
   }
 
   async subscribeNewsletter(sub: InsertNewsletter): Promise<NewsletterSubscription> {
-    const [created] = await db.insert(newsletterSubscriptions).values(sub).returning();
-    return created;
+    return insertAndReturn<NewsletterSubscription>(newsletterSubscriptions, sub);
   }
 
   async createPastorApplication(app: InsertPastorApplication): Promise<PastorApplication> {
-    const [created] = await db.insert(pastorApplications).values(app).returning();
-    return created;
+    return insertAndReturn<PastorApplication>(pastorApplications, app);
   }
 
   async getPastorApplications(): Promise<PastorApplication[]> {
@@ -210,8 +217,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createContactMessage(msg: InsertContactMessage): Promise<ContactMessage> {
-    const [created] = await db.insert(contactMessages).values(msg).returning();
-    return created;
+    return insertAndReturn<ContactMessage>(contactMessages, msg);
   }
 
   async rebuildSearchIndex(): Promise<void> {
@@ -333,10 +339,10 @@ export class DatabaseStorage implements IStorage {
     if (query && query.trim()) {
       conditions.push(
         or(
-          ilike(searchIndex.title, `%${query}%`),
-          ilike(searchIndex.description, `%${query}%`),
-          ilike(searchIndex.author, `%${query}%`),
-          ilike(searchIndex.category, `%${query}%`)
+          like(searchIndex.title, `%${query}%`),
+          like(searchIndex.description, `%${query}%`),
+          like(searchIndex.author, `%${query}%`),
+          like(searchIndex.category, `%${query}%`)
         )
       );
     }
@@ -349,28 +355,29 @@ export class DatabaseStorage implements IStorage {
 
     if (categories && categories.length > 0) {
       conditions.push(
-        or(...categories.map((c) => ilike(searchIndex.category, c)))
+        or(...categories.map((c) => like(searchIndex.category, c)))
       );
     }
 
     if (tags && tags.length > 0) {
-      conditions.push(
-        sql`${searchIndex.tags} && ${sql`ARRAY[${sql.join(tags.map(t => sql`${t}`), sql`, `)}]::text[]`}`
+      const tagConditions = tags.map(t =>
+        sql`JSON_CONTAINS(${searchIndex.tags}, JSON_QUOTE(${t}))`
       );
+      conditions.push(or(...tagConditions));
     }
 
     if (author) {
-      conditions.push(ilike(searchIndex.author, `%${author}%`));
+      conditions.push(like(searchIndex.author, `%${author}%`));
     }
 
     const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
     const [countResult] = await db
-      .select({ count: sql<number>`count(*)::int` })
+      .select({ count: sql<number>`count(*)` })
       .from(searchIndex)
       .where(whereClause);
 
-    const total = countResult?.count || 0;
+    const total = Number(countResult?.count) || 0;
 
     let orderClause;
     if (sortBy === "newest") {
@@ -391,10 +398,10 @@ export class DatabaseStorage implements IStorage {
 
     const queryCondition = query && query.trim()
       ? or(
-          ilike(searchIndex.title, `%${query}%`),
-          ilike(searchIndex.description, `%${query}%`),
-          ilike(searchIndex.author, `%${query}%`),
-          ilike(searchIndex.category, `%${query}%`)
+          like(searchIndex.title, `%${query}%`),
+          like(searchIndex.description, `%${query}%`),
+          like(searchIndex.author, `%${query}%`),
+          like(searchIndex.category, `%${query}%`)
         )
       : undefined;
 
@@ -418,8 +425,9 @@ export class DatabaseStorage implements IStorage {
       if (row.author) {
         authorFacets[row.author] = (authorFacets[row.author] || 0) + 1;
       }
-      if (row.tags) {
-        for (const tag of row.tags) {
+      const tagList = row.tags as string[] | null;
+      if (tagList) {
+        for (const tag of tagList) {
           tagFacets[tag] = (tagFacets[tag] || 0) + 1;
         }
       }
