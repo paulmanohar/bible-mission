@@ -72,11 +72,22 @@ export default function ResourcesSection() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {books.slice(0, 4).map((book) => (
               <div key={book.id} data-testid={`card-book-${book.id}`} className="border border-border/50 bg-background hover:border-primary/30 transition-colors shadow-sm hover:shadow-md">
-                <div className="aspect-[3/4] relative overflow-hidden bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
-                  <div className="text-center p-6">
-                    <div className="text-5xl mb-4 opacity-30">📖</div>
-                    <p className="font-serif text-sm font-bold text-primary/60">{book.author}</p>
-                  </div>
+                <div className="aspect-[3/4] relative overflow-hidden bg-muted">
+                  {book.imageId ? (
+                    <img
+                      src={`/assets/images/books/${book.imageId}.jpg`}
+                      alt={book.title}
+                      className="w-full h-full object-cover"
+                      data-testid={`img-book-cover-${book.id}`}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-primary/10 to-primary/5 flex items-center justify-center">
+                      <div className="text-center p-6">
+                        <div className="text-5xl mb-4 opacity-30">📖</div>
+                        <p className="font-serif text-sm font-bold text-primary/60">{book.author}</p>
+                      </div>
+                    </div>
+                  )}
                   <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm px-2 py-1 text-xs font-medium">{book.language}</div>
                 </div>
                 <div className="p-5">

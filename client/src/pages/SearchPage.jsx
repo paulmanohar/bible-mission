@@ -152,7 +152,7 @@ function SearchResultCard({ result }) {
 
         {result.imageUrl && (
           <div className="w-24 h-32 bg-muted/50 shrink-0 overflow-hidden hidden sm:block">
-            <img src={result.imageUrl} alt="" className="w-full h-full object-cover" />
+            <img src={`/assets/images/${result.imageUrl}`} alt="" className="w-full h-full object-cover" />
           </div>
         )}
       </div>
