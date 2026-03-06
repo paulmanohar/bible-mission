@@ -179,7 +179,7 @@ async function rebuildIndex() {
 
   const entries: any[] = [];
   for (const b of allBooks) {
-    entries.push({ sourceType: "Book", sourceId: b.id, title: b.title, description: b.description, author: b.author, category: b.category, tags: b.tags || [], language: b.language, imageUrl: b.coverImage, slug: null, date: null, metadata: null });
+    entries.push({ sourceType: "Book", sourceId: b.id, title: b.title, description: b.description, author: b.author, category: b.category, tags: b.tags || [], language: b.language, imageUrl: "books/" + b.imageId + ".jpg", slug: null, date: null, metadata: null });
   }
   for (const e of allEvents) {
     entries.push({ sourceType: "Event", sourceId: e.id, title: e.title, description: e.description, author: e.pastorName, category: "Event", tags: e.tags || [], language: null, imageUrl: e.posterImage, slug: null, date: e.date, metadata: JSON.stringify({ location: e.location, time: e.time }) });
