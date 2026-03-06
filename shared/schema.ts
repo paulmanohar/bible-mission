@@ -25,6 +25,7 @@ export const books = mysqlTable("books", {
   author: varchar("author", { length: 255 }).notNull().default("M.Devadas Ayyagaru"),
   language: varchar("language", { length: 50 }).notNull().default("English"),
   category: varchar("category", { length: 255 }).notNull(),
+  imageId: varchar("image_id", { length: 255 }),
   description: text("description"),
   coverImage: text("cover_image"),
   contentUrl: text("content_url"),

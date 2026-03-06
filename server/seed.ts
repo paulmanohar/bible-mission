@@ -25,15 +25,72 @@ async function seed() {
   }
 
   await db.insert(books).values([
-    { title: "The Path of Grace", author: "M.Devadas Ayyagaru", language: "English", category: "Theology", description: "A comprehensive exploration of divine grace and its transformative power in everyday life.", tags: ["grace", "theology", "salvation", "christian-living"] },
-    { title: "ప్రార్థన శక్తి (Power of Prayer)", author: "M.Devadas Ayyagaru", language: "Telugu", category: "Prayer", description: "ప్రార్థన యొక్క శక్తి మరియు దేవునితో సంభాషణ గురించి లోతైన అధ్యయనం.", tags: ["prayer", "telugu", "devotion", "spiritual-growth"] },
-    { title: "Divine Revelations", author: "M.Devadas Ayyagaru", language: "English", category: "Devotional", description: "Insights and revelations received through years of dedicated ministry and spiritual service.", tags: ["revelation", "devotional", "ministry", "faith"] },
-    { title: "ఆధ్యాత్మిక ప్రయాణం (Spiritual Journey)", author: "M.Devadas Ayyagaru", language: "Telugu", category: "Sermons", description: "ఆధ్యాత్మిక ప్రయాణం - జీవితంలో దేవుని ప్రణాళికను అర్థం చేసుకోవడం.", tags: ["spiritual-journey", "telugu", "sermons", "god-plan"] },
-    { title: "Foundations of Faith", author: "M.Devadas Ayyagaru", language: "English", category: "Theology", description: "Building a strong spiritual foundation through biblical truths and practical application.", tags: ["faith", "theology", "foundation", "bible-study"] },
-    { title: "రక్షణ మార్గం (Way of Salvation)", author: "M.Devadas Ayyagaru", language: "Telugu", category: "Theology", description: "రక్షణ మార్గం గురించి వివరమైన బోధన మరియు ఆచరణాత్మక మార్గదర్శకం.", tags: ["salvation", "telugu", "theology", "teaching"] },
-    { title: "Walking in Light", author: "M.Devadas Ayyagaru", language: "English", category: "Devotional", description: "Daily guidance for walking in the light of God's word and His promises.", tags: ["devotional", "light", "daily-reading", "christian-living"] },
-    { title: "విశ్వాస జీవితం (Life of Faith)", author: "M.Devadas Ayyagaru", language: "Telugu", category: "Devotional", description: "విశ్వాసంతో జీవించడం - ప్రతిరోజూ దేవుని నమ్మకంతో నడవడం.", tags: ["faith", "telugu", "devotional", "daily-living"] },
-  ]);
+
+{ imageId: "1", title: "Telugu Christhava Keerthanalu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "teluguchristhavakeerthanalu", category: "Hymns", description: "దేవుని స్తుతిస్తూ పాడే ఆత్మీయ క్రైస్తవ కీర్తనల సమాహారం.", tags: ["hymns","praise","worship","church-songs","devotional-music"] },
+
+{ imageId: "2", title: "Sannidhi Kramavali", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "sannidhikramavali", category: "Worship", description: "దేవుని సన్నిధిలో ఆరాధనను క్రమబద్ధంగా నిర్వహించడానికి మార్గదర్శకం.", tags: ["worship","presence-of-god","church","devotion"] },
+
+{ imageId: "3", title: "Daiva Lakshanamula Sthuthi", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "daivalakshanamulasthuthi", category: "Theology", description: "దేవుని దివ్య లక్షణాలను స్తుతిస్తూ వివరించే గ్రంథం.", tags: ["attributes-of-god","praise","theology","holiness"] },
+
+{ imageId: "4", title: "Satanu nedirinchu Soothramulu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "satannedirinchusootramulu", category: "Christian Living", description: "సాతాను ప్రలోభాలను ఎదిరించడానికి ఆత్మీయ మార్గదర్శక సూత్రాలు.", tags: ["spiritual-war","faith","victory","temptation"] },
+
+{ imageId: "5", title: "Samarpana Prardhanalu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "samarpanaprardhanalu", category: "Prayer", description: "దేవునికి సంపూర్ణ సమర్పణతో చేసే ప్రార్థనల సమాహారం.", tags: ["prayer","dedication","surrender","devotion"] },
+
+{ imageId: "6", title: "Rakada Prardhanalu Sthuthulu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "rakadaprardhanlusthuthulu", category: "Prophecy", description: "ప్రభువు రాకడను ఎదురుచూస్తూ చేసే ప్రార్థనలు మరియు స్తుతులు.", tags: ["second-coming","prophecy","watchfulness","jesus-return"] },
+
+{ imageId: "7", title: "Upavasa Pradhana Deeksha", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "upavasaprardhanadiksha", category: "Spiritual Discipline", description: "ఉపవాసం మరియు ప్రార్థన ద్వారా ఆత్మీయ జీవితం బలపడే విధానాన్ని వివరిస్తుంది.", tags: ["fasting","prayer","discipline","seeking-god"] },
+
+{ imageId: "8", title: "Suvisesha Dhorani", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "suvisheshadorani", category: "Evangelism", description: "సువార్త ప్రచారం యొక్క విధానం మరియు ఆత్మీయ దృక్పథం.", tags: ["gospel","evangelism","mission","salvation"] },
+
+{ imageId: "9", title: "Siluva Viluva Dyanakaluva", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "siluvaviluvadyanakaluva", category: "Devotional", description: "సిలువ యొక్క విలువను ధ్యానిస్తూ విశ్వాసాన్ని గాఢతరం చేసే గ్రంథం.", tags: ["cross","lent","redemption","sacrifice","jesus-crucifixion"] },
+
+{ imageId: "10", title: "Sangharadhanalu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "sangaradhanalu", category: "Worship", description: "సంఘంగా దేవునిని ఆరాధించేందుకు రూపొందించిన ఆరాధన విధానాలు.", tags: ["church","worship","congregation","service"] },
+
+{ imageId: "11", title: "Sannidhi Vanne", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "sannidhivanne", category: "Devotional", description: "దేవుని సన్నిధిలో ఉండే ఆత్మీయ ఆనందాన్ని వివరించే గ్రంథం.", tags: ["presence-of-god","devotion","faith","spiritual-life"] },
+
+{ imageId: "12", title: "Sannidhi Sampadha", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "sannidhisampadha", category: "Devotional", description: "దేవుని సన్నిధిలో పొందే ఆత్మీయ సంపద గురించి వివరణ.", tags: ["presence-of-god","blessings","faith","devotion"] },
+
+{ imageId: "13", title: "Vimalathma Prokshanamu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "vimalathmaprokshanamu", category: "Holy Spirit", description: "పరిశుద్ధాత్మ శుద్ధి మరియు ఆత్మీయ ప్రక్షాళన గురించి బోధన.", tags: ["holy-spirit","purification","sanctification"] },
+
+{ imageId: "14", title: "Prardhana Manjari", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "prardhanamanjari", category: "Prayer", description: "వివిధ సందర్భాలలో ఉపయోగపడే ప్రార్థనల సంకలనం.", tags: ["prayer","intercession","devotion","supplication"] },
+
+{ imageId: "15", title: "Prabhu Samskarapu Vindu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "prabhusamskarapuvindhu", category: "Theology", description: "ప్రభు భోజనము యొక్క ఆత్మీయ అర్థం మరియు ప్రాముఖ్యత.", tags: ["communion","sacrament","last-supper","church"] },
+
+{ imageId: "16", title: "Parisudhatma Abhisheka Abhyasamu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "parisudhathmaabhishekaabyasamu", category: "Holy Spirit", description: "పరిశుద్ధాత్మ అభిషేకాన్ని అనుభవించేందుకు ఆత్మీయ సాధన.", tags: ["holy-spirit","anointing","spiritual-growth"] },
+
+{ imageId: "17", title: "Vikyatha Vanithalu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "vikyathavanithalu", category: "Biography", description: "ఆత్మీయ జీవితంలో విశేషంగా నిలిచిన మహిళల జీవిత కథలు.", tags: ["women","biography","faith","testimony"] },
+
+{ imageId: "18", title: "Rakshana Vani", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "rakshanavani", category: "Salvation", description: "రక్షణ సత్యాన్ని వివరించే ఆత్మీయ సందేశాలు.", tags: ["salvation","gospel","redemption","faith"] },
+
+{ imageId: "19", title: "Rakshana Padyamulu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "rakshanapadyamulu", category: "Poetry", description: "రక్షణ సత్యాన్ని పద్యరూపంలో తెలియజేసే రచనలు.", tags: ["poetry","salvation","faith","devotional"] },
+
+{ imageId: "20", title: "Rakshna Sunadhamu", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "rakshananasunadhamu", category: "Devotional", description: "రక్షణ ఆనందాన్ని తెలియజేసే ఆత్మీయ సందేశాలు.", tags: ["salvation","joy","faith"] },
+
+{ imageId: "41", title: "Daivika Swasthatha", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "daivikaswasthatha", category: "Healing", description: "దేవుని ద్వారా లభించే దైవిక స్వస్థత గురించి బోధన.", tags: ["healing","divine-healing","faith-healing","miracles"] },
+
+{ imageId: "45", title: "Aathmiya Swasthatha", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "athmiyaswasthatha", category: "Christian Living", description: "ఆత్మీయ ఆరోగ్యం మరియు విశ్వాసంలో స్థిరత్వం గురించి బోధన.", tags: ["spiritual-health","inner-healing","faith","restoration"] },
+
+{ imageId: "46", title: "Abhayani", author: "M.Devadas Ayyagaru", language: "Telugu", coverImage: "abhayani", category: "Devotional", description: "దేవుని మీద విశ్వాసం ద్వారా భయంలేని జీవితం గురించి బోధన.", tags: ["faith","courage","trust-in-god","fearless"] },
+
+{ imageId: "47", title: "Presence Of God", author: "M.Devadas Ayyagaru", language: "English", coverImage: "Sannidhi-Kramavali-_-English-A-Prologue-to-the-presence-of-God", category: "Devotional", description: "A guide explaining how believers can experience the presence of God through worship and devotion.", tags: ["presence-of-god","worship","devotion","spiritual-growth"] },
+
+{ imageId: "48", title: "Praising Divine Qualities", author: "M.Devadas Ayyagaru", language: "English", coverImage: "Praising-Divine-Qualities", category: "Theology", description: "A reflection on the divine attributes of God encouraging believers to praise His holiness and love.", tags: ["attributes-of-god","praise","theology"] },
+
+{ imageId: "49", title: "Prayer of Consecration", author: "M.Devadas Ayyagaru", language: "English", coverImage: "Prayer-of-Consecration-Samarpana-Prardhana", category: "Prayer", description: "A guide to dedicating one's life completely to God through prayer and surrender.", tags: ["prayer","consecration","dedication","surrender"] },
+
+{ imageId: "50", title: "Prayer for Lord's Coming", author: "M.Devadas Ayyagaru", language: "English", coverImage: "Prayers-and-Praises-for-the-Lords-Coming.-Rakada-Prardhana-Stuthulu", category: "Prophecy", description: "Prayers and praises preparing believers for the second coming of the Lord.", tags: ["second-coming","prophecy","watchfulness"] },
+
+{ imageId: "51", title: "Holy Communion", author: "M.Devadas Ayyagaru", language: "English", coverImage: "holycommunion", category: "Theology", description: "Explains the spiritual meaning and importance of Holy Communion in Christian worship.", tags: ["communion","sacrament","last-supper"] },
+
+{ imageId: "52", title: "Fasting Prayer", author: "M.Devadas Ayyagaru", language: "English", coverImage: "An-Introduction-to-the-Fasting-Prayer", category: "Spiritual Discipline", description: "An introduction to fasting and prayer as a spiritual discipline.", tags: ["fasting","prayer","discipline"] },
+
+{ imageId: "53", title: "Sunday Order of Worship", author: "M.Devadas Ayyagaru", language: "English", coverImage: "Sunday-order-of-Worship", category: "Worship", description: "A structured order of worship designed for Sunday church services.", tags: ["church","worship","liturgy"] },
+
+{ imageId: "54", title: "The Wealth", author: "M.Devadas Ayyagaru", language: "English", coverImage: "The-Wealth-of-the-Lords-Presence-Sannidhi-Sampada", category: "Devotional", description: "Describes the spiritual richness found in living in the presence of the Lord.", tags: ["presence-of-god","devotion","faith"] },
+
+{ imageId: "55", title: "Conscience Manasakshi", author: "M.Devadas Ayyagaru", language: "English", coverImage: "CONCIENCE-Manasakshi", category: "Christian Living", description: "A reflection on how conscience guides believers toward righteous living.", tags: ["conscience","faith","righteousness"] }
+
+]);
 
   await db.insert(events).values([
     {

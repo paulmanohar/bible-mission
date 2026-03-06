@@ -1,0 +1,1 @@
+ALTER TABLE `books` ADD `image_id` varchar(255);
