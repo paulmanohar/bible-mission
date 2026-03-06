@@ -6,9 +6,9 @@ Full-stack web application for **Bible Mission** ([biblemission.life](https://bi
 
 | Layer      | Technology                                         |
 | ---------- | -------------------------------------------------- |
-| Frontend   | React 19 (JSX), Tailwind CSS v4, wouter, Redux Toolkit |
+| Frontend   | React 19 (JSX), Tailwind CSS v4, React Router, Redux Toolkit |
 | Backend    | Node.js, Express 5                                 |
-| Database   | PostgreSQL with Drizzle ORM                        |
+| Database   | AWS RDS MySQL 8.0 with Drizzle ORM                |
 | Auth       | JWT (jsonwebtoken) + bcryptjs                      |
 | Fonts      | Inter (sans), Lora (serif)                         |
 
@@ -17,7 +17,7 @@ Full-stack web application for **Bible Mission** ([biblemission.life](https://bi
 ## Prerequisites
 
 - **Node.js** v20+
-- **PostgreSQL** 15+ (running locally or a hosted instance)
+- **MySQL 8.0+** (AWS RDS or local instance)
 
 ---
 
@@ -41,22 +41,35 @@ npm install
 Create a `.env` file in the project root:
 
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/bible_mission
+RDS_HOST=your-rds-endpoint.amazonaws.com
+RDS_PORT=3306
+RDS_USER=your-username
+RDS_PASSWORD=your-password
+RDS_DATABASE=your-database-name
 JWT_SECRET=your-secret-key-here
 ```
 
 > Generate a strong JWT secret:  
 > `node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"`
 
-### 4. Push the database schema
+### 4. Generate and run database migrations
 
 ```bash
-npm run db:push
+npm run db:generate
+npm run db:migrate
 ```
 
-This uses Drizzle Kit to create all tables in your PostgreSQL database.
+This generates SQL migration files from the Drizzle schema and applies them to your MySQL database.
 
-### 5. Run the development server
+### 5. Seed the database (optional)
+
+```bash
+npx tsx server/seed.ts
+```
+
+This populates the database with sample books, events, blog posts, podcasts, livestreams, and builds the search index.
+
+### 6. Run the development server
 
 ```bash
 npm run dev
@@ -85,10 +98,12 @@ bible-mission/
 │   ├── routes.ts            # All API route handlers
 │   ├── storage.ts           # Database storage interface + Drizzle implementation
 │   ├── seed.ts              # Seed data for development
+│   ├── migrate.ts           # Migration runner (tsx server/migrate.ts)
 │   └── index.ts             # Server entry point
 ├── shared/
 │   └── schema.ts            # Drizzle ORM schema + Zod validation schemas
-├── drizzle.config.ts        # Drizzle Kit configuration
+├── migrations/              # Auto-generated SQL migration files
+├── drizzle.config.ts        # Drizzle Kit configuration (MySQL dialect)
 ├── package.json
 ├── tailwind.config.ts
 ├── vite.config.ts
@@ -127,6 +142,13 @@ bible-mission/
 | PUT    | `/api/auth/profile`         | Update profile (JWT required)      |
 | PUT    | `/api/auth/change-password` | Change password (JWT required)     |
 
+### Search Endpoints
+
+| Method | Route                  | Description                                                    |
+| ------ | ---------------------- | -------------------------------------------------------------- |
+| GET    | `/api/search`          | Global search (query: q, types, categories, tags, author, sort, page, limit) |
+| POST   | `/api/search/rebuild`  | Rebuild the search index from all source tables                |
+
 ---
 
 ## Frontend Routes
@@ -164,15 +186,25 @@ bible-mission/
 
 ## Database
 
-The app uses **10 PostgreSQL tables** managed by Drizzle ORM:
+The app uses **11 MySQL tables** managed by Drizzle ORM:
 
 `users`, `books`, `events`, `prayer_requests`, `blog_posts`, `podcasts`, `livestreams`, `newsletter_subscriptions`, `pastor_applications`, `contact_messages`, `search_index`
 
-To reset and re-push the schema:
+### Migration Commands
 
-```bash
-npm run db:push
-```
+| Command              | Description                                    |
+| -------------------- | ---------------------------------------------- |
+| `npm run db:generate` | Generate SQL migration files from schema      |
+| `npm run db:migrate`  | Apply migrations to MySQL database            |
+| `npm run db:push`     | Push schema directly (dev shortcut)           |
+| `npm run db:studio`   | Open Drizzle Studio for database browsing     |
+
+### MySQL Notes
+
+- Tags are stored as `json` columns (not PostgreSQL arrays)
+- Tag filtering uses `JSON_CONTAINS()` instead of array operators
+- No `.returning()` support — uses `insertAndReturn()` helper pattern
+- Text search uses `like` (not `ilike`)
 
 ---
 

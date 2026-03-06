@@ -1,5 +1,5 @@
 import { Phone, Heart, Users, CheckCircle2 } from "lucide-react";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 
 export default function CTASection() {
   return (
@@ -21,7 +21,7 @@ export default function CTASection() {
             <p className="text-muted-foreground mb-6 flex-1">Need spiritual support? Submit a prayer request or call our 24/7 helpline.</p>
             <div className="space-y-4">
               <div className="flex items-center gap-2 font-medium bg-muted p-3"><Phone className="h-5 w-5 text-primary" /><span>+91 00000 00000</span></div>
-              <Link href="/connect">
+              <Link to="/connect">
                 <span className="w-full border border-border py-2 text-sm font-medium hover:bg-muted transition-colors flex items-center justify-center cursor-pointer" data-testid="button-prayer-request">
                   Submit Request Online
                 </span>
@@ -39,7 +39,7 @@ export default function CTASection() {
               <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Access locked study materials</li>
               <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Personalized recommendations</li>
             </ul>
-            <Link href="/login">
+            <Link to="/login">
               <span className="w-full bg-primary text-primary-foreground py-2 text-sm font-medium hover:bg-primary/90 transition-colors flex items-center justify-center cursor-pointer" data-testid="button-member-signup">
                 Sign Up / Login
               </span>
@@ -56,7 +56,7 @@ export default function CTASection() {
               <p className="text-sm font-medium text-white bg-white/10 p-4 border border-white/20">
                 Submit event details, posters, and pin locations to be featured on our official pages.
               </p>
-              <Link href="/connect">
+              <Link to="/connect">
                 <span className="w-full bg-white text-primary py-2 text-sm font-medium hover:bg-white/90 transition-colors flex items-center justify-center cursor-pointer" data-testid="button-pastor-apply">
                   Apply for Partnership
                 </span>

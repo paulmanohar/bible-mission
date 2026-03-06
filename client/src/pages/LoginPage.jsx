@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useLocation } from "wouter";
+import { Link, useNavigate } from "react-router-dom";
 import { loginUser, registerUser, forgotPassword, resetPassword, clearAuthError, clearForgotPasswordSuccess, clearResetPasswordSuccess } from "../store/slices/authSlice";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 export default function LoginPage() {
   const dispatch = useDispatch();
-  const [, navigate] = useLocation();
+  const navigate = useNavigate();
   const { loading, error, isAuthenticated, user, forgotPasswordSuccess, resetPasswordSuccess } = useSelector((s) => s.auth);
   const [activeTab, setActiveTab] = useState("login");
   const [loginForm, setLoginForm] = useState({ username: "", password: "" });

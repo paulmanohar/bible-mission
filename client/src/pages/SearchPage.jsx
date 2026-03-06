@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation, Link } from "wouter";
+import { Link } from "react-router-dom";
 import {
   Search, X, BookOpen, Calendar, Mic, Radio, FileText,
   ChevronDown, ChevronUp, SlidersHorizontal, Tag, User,
@@ -162,7 +162,6 @@ function SearchResultCard({ result }) {
 
 export default function SearchPage() {
   const dispatch = useDispatch();
-  const [, setLocation] = useLocation();
   const {
     query, results, total, facets, activeFilters,
     sortBy, page, loading, hasSearched,

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MapPin, Calendar, Clock, ArrowRight } from "lucide-react";
 import { fetchEvents } from "../store/slices/eventsSlice";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 
 function formatDateShort(dateStr) {
   const d = new Date(dateStr);
@@ -31,7 +31,7 @@ export default function MeetingsSection() {
             <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4" data-testid="text-meetings-title">Upcoming Meetings</h2>
             <p className="text-muted-foreground text-lg">Join us in fellowship and worship. Find official events hosted by our pastors worldwide.</p>
           </div>
-          <Link href="/meetings">
+          <Link to="/meetings">
             <span className="inline-flex items-center h-10 px-6 bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors cursor-pointer" data-testid="button-view-all-events">
               View All Events <ArrowRight className="ml-2 h-4 w-4" />
             </span>
@@ -65,7 +65,7 @@ export default function MeetingsSection() {
                     {event.time && <div className="flex items-center gap-2"><Clock className="h-4 w-4 shrink-0" /><span>{event.time}</span></div>}
                     <div className="flex items-start gap-2"><MapPin className="h-4 w-4 shrink-0 mt-0.5" /><span>{event.location}</span></div>
                   </div>
-                  <Link href="/meetings">
+                  <Link to="/meetings">
                     <span className="w-full border border-border/60 hover:bg-muted flex items-center justify-between py-2 px-4 text-sm font-medium transition-colors cursor-pointer">
                       View Details & Map <ArrowRight className="h-4 w-4" />
                     </span>

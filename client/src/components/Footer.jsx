@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Youtube, Instagram } from "lucide-react";
 
 export default function Footer() {
@@ -21,11 +21,11 @@ export default function Footer() {
           <div className="space-y-4">
             <h4 className="font-serif text-lg font-semibold">Quick Links</h4>
             <ul className="space-y-2 text-sm text-primary-foreground/80">
-              <li><Link href="/about" className="hover:text-white transition-colors">About Us</Link></li>
-              <li><Link href="/resources" className="hover:text-white transition-colors">Books & Resources</Link></li>
-              <li><Link href="/meetings" className="hover:text-white transition-colors">Upcoming Meetings</Link></li>
-              <li><Link href="/connect" className="hover:text-white transition-colors">Join as Pastor / Member</Link></li>
-              <li><Link href="/login" className="hover:text-white transition-colors">Login / Sign Up</Link></li>
+              <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
+              <li><Link to="/resources" className="hover:text-white transition-colors">Books & Resources</Link></li>
+              <li><Link to="/meetings" className="hover:text-white transition-colors">Upcoming Meetings</Link></li>
+              <li><Link to="/connect" className="hover:text-white transition-colors">Join as Pastor / Member</Link></li>
+              <li><Link to="/login" className="hover:text-white transition-colors">Login / Sign Up</Link></li>
             </ul>
           </div>
 

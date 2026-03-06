@@ -4,7 +4,7 @@
 Full-stack web application for Bible Mission, a global religious organization headquartered in Guntur, Andhra Pradesh. Inspired by the design of GTY.org and Ligonier.org.
 
 ## Tech Stack
-- **Frontend**: React 19 (JSX), Tailwind CSS v4, wouter (routing), Redux Toolkit (state management)
+- **Frontend**: React 19 (JSX), Tailwind CSS v4, React Router (routing), Redux Toolkit (state management)
 - **Backend**: Express 5, Node.js (separated API layer)
 - **Database**: AWS RDS MySQL 8 with Drizzle ORM
 - **Fonts**: Inter (sans), Lora (serif)

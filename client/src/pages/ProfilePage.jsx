@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "wouter";
+import { useNavigate } from "react-router-dom";
 import { logout, updateProfile, changePassword, clearProfileSuccess, clearAuthError } from "../store/slices/authSlice";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 export default function ProfilePage() {
   const dispatch = useDispatch();
-  const [, navigate] = useLocation();
+  const navigate = useNavigate();
   const { user, isAuthenticated, loading, profileLoading, profileError, profileSuccess, passwordSuccess } = useSelector((s) => s.auth);
 
   const [profileForm, setProfileForm] = useState({ fullName: "", email: "", phone: "", location: "" });

@@ -1,4 +1,4 @@
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 
 export default function Hero() {
   return (
@@ -24,12 +24,12 @@ export default function Hero() {
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Link href="/resources">
+            <Link to="/resources">
               <span className="w-full sm:w-auto text-lg px-8 py-4 bg-white text-primary hover:bg-white/90 inline-flex items-center justify-center font-medium cursor-pointer transition-colors" data-testid="button-explore-books">
                 Explore Books & Teachings
               </span>
             </Link>
-            <Link href="/meetings">
+            <Link to="/meetings">
               <span className="w-full sm:w-auto text-lg px-8 py-4 border border-white text-white hover:bg-white/10 inline-flex items-center justify-center font-medium cursor-pointer backdrop-blur-sm transition-colors" data-testid="button-find-meetings">
                 Find Upcoming Meetings
               </span>

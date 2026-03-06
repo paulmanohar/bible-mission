@@ -1,4 +1,4 @@
-import { Link, useLocation } from "wouter";
+import { Link, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Menu, X, User, Search } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -38,13 +38,13 @@ export default function Navbar() {
             <Menu className="h-6 w-6" />
           </button>
 
-          <Link href="/">
+          <Link to="/">
             <span className="font-serif text-2xl font-bold tracking-tight cursor-pointer" data-testid="link-logo">Bible Mission</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href}>
+              <Link key={link.href} to={link.href}>
                 <span className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors cursor-pointer" data-testid={`link-nav-${link.label.toLowerCase().replace(/\s/g, "-")}`}>
                   {link.label}
                 </span>
@@ -53,17 +53,17 @@ export default function Navbar() {
           </nav>
 
           <div className="flex items-center gap-3">
-            <Link href="/search">
+            <Link to="/search">
               <span className="p-2 hover:bg-muted rounded transition-colors cursor-pointer" data-testid="button-search">
                 <Search className="h-5 w-5 text-muted-foreground" />
               </span>
             </Link>
-            <Link href="/connect">
+            <Link to="/connect">
               <span className="hidden lg:inline-flex items-center h-9 px-4 border border-border text-sm font-medium hover:bg-muted transition-colors cursor-pointer" data-testid="button-join">
                 Join as Pastor/Member
               </span>
             </Link>
-            <Link href={isAuthenticated ? "/profile" : "/login"}>
+            <Link to={isAuthenticated ? "/profile" : "/login"}>
               <span className="inline-flex items-center h-9 px-4 bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors cursor-pointer" data-testid="button-login">
                 <User className="mr-2 h-4 w-4" />
                 {isAuthenticated ? user?.fullName?.split(" ")[0] : "Login"}
@@ -76,7 +76,7 @@ export default function Navbar() {
       {mobileOpen && (
         <div className="md:hidden fixed inset-0 z-[100] bg-background flex flex-col">
           <div className="flex items-center justify-between px-4 h-20 border-b">
-            <Link href="/" onClick={closeMenu}>
+            <Link to="/" onClick={closeMenu}>
               <span className="font-serif text-2xl font-bold tracking-tight cursor-pointer">Bible Mission</span>
             </Link>
             <button
@@ -90,7 +90,7 @@ export default function Navbar() {
 
           <nav className="flex-1 flex flex-col px-6 pt-8 space-y-2">
             {navLinks.map((link) => (
-              <Link key={link.href} href={link.href}>
+              <Link key={link.href} to={link.href}>
                 <span
                   className="block py-4 text-xl font-medium hover:text-primary border-b border-border/50 transition-colors cursor-pointer"
                   onClick={closeMenu}
@@ -100,7 +100,7 @@ export default function Navbar() {
                 </span>
               </Link>
             ))}
-            <Link href="/search">
+            <Link to="/search">
               <span className="block py-4 text-xl font-medium hover:text-primary border-b border-border/50 transition-colors cursor-pointer" onClick={closeMenu} data-testid="link-mobile-search">
                 Search
               </span>
@@ -108,12 +108,12 @@ export default function Navbar() {
           </nav>
 
           <div className="px-6 pb-8 space-y-3">
-            <Link href="/connect">
+            <Link to="/connect">
               <span className="block w-full text-center py-3 border border-border text-sm font-medium hover:bg-muted transition-colors cursor-pointer" onClick={closeMenu} data-testid="link-mobile-join">
                 Join as Pastor/Member
               </span>
             </Link>
-            <Link href={isAuthenticated ? "/profile" : "/login"}>
+            <Link to={isAuthenticated ? "/profile" : "/login"}>
               <span className="block w-full text-center py-3 bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors cursor-pointer" onClick={closeMenu} data-testid="link-mobile-login">
                 <User className="inline mr-2 h-4 w-4" />
                 {isAuthenticated ? user?.fullName?.split(" ")[0] : "Login"}

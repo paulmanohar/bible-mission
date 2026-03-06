@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Search } from "lucide-react";
 import { fetchBooks, setSearchQuery, setActiveLanguage } from "../store/slices/booksSlice";
-import { Link } from "wouter";
+import { Link } from "react-router-dom";
 
 export default function ResourcesSection() {
   const dispatch = useDispatch();
@@ -91,7 +91,7 @@ export default function ResourcesSection() {
         )}
 
         <div className="mt-12 text-center">
-          <Link href="/resources">
+          <Link to="/resources">
             <span className="inline-flex items-center h-12 px-8 border border-primary text-primary hover:bg-primary hover:text-primary-foreground transition-colors text-base font-medium cursor-pointer" data-testid="link-view-library">
               View Complete Library
             </span>

@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import store from "./store/store";
@@ -26,28 +26,24 @@ function AuthBootstrap({ children }) {
   return children;
 }
 
-function Router() {
-  return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/about" component={AboutPage} />
-      <Route path="/resources" component={ResourcesPage} />
-      <Route path="/meetings" component={MeetingsPage} />
-      <Route path="/connect" component={ConnectPage} />
-      <Route path="/search" component={SearchPage} />
-      <Route path="/login" component={LoginPage} />
-      <Route path="/profile" component={ProfilePage} />
-      <Route component={NotFound} />
-    </Switch>
-  );
-}
-
 function App() {
   return (
     <Provider store={store}>
-      <AuthBootstrap>
-        <Router />
-      </AuthBootstrap>
+      <BrowserRouter>
+        <AuthBootstrap>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/resources" element={<ResourcesPage />} />
+            <Route path="/meetings" element={<MeetingsPage />} />
+            <Route path="/connect" element={<ConnectPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthBootstrap>
+      </BrowserRouter>
     </Provider>
   );
 }
