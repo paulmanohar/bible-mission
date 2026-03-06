@@ -1,3 +1,4 @@
+import 'dotenv/config'; 
 import { defineConfig } from "drizzle-kit";
 
 const host = process.env.RDS_HOST;

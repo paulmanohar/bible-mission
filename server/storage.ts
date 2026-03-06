@@ -1,3 +1,4 @@
+import 'dotenv/config'; 
 import {
   users, books, events, prayerRequests, blogPosts, podcasts,
   livestreams, newsletterSubscriptions, pastorApplications, contactMessages,
