@@ -106,6 +106,12 @@ export async function registerRoutes(
     res.json(posts);
   });
 
+  app.get("/api/blog/id/:id", async (req, res) => {
+    const post = await storage.getBlogPostById(Number(req.params.id));
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    res.json(post);
+  });
+
   app.get("/api/blog/:slug", async (req, res) => {
     const post = await storage.getBlogPost(req.params.slug);
     if (!post) return res.status(404).json({ message: "Post not found" });
@@ -123,6 +129,12 @@ export async function registerRoutes(
   app.get("/api/podcasts", async (_req, res) => {
     const podcasts = await storage.getPodcasts(true);
     res.json(podcasts);
+  });
+
+  app.get("/api/podcasts/:id", async (req, res) => {
+    const podcast = await storage.getPodcast(Number(req.params.id));
+    if (!podcast) return res.status(404).json({ message: "Podcast not found" });
+    res.json(podcast);
   });
 
   app.post("/api/podcasts", async (req, res) => {

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { MapPin, Calendar, Clock, ArrowRight } from "lucide-react";
 import { fetchEvents } from "../store/slices/eventsSlice";
 import { Link } from "react-router-dom";
+import { itemPath } from "../utils/slug";
 
 function formatDateShort(dateStr) {
   const d = new Date(dateStr);
@@ -51,7 +52,7 @@ export default function MeetingsSection() {
             {events.slice(0, 3).map((event) => {
               const { month, day } = formatDateShort(event.date);
               return (
-                <div key={event.id} data-testid={`card-event-${event.id}`} className="group cursor-pointer">
+                <Link key={event.id} to={itemPath("events", event.id, event.title)} data-testid={`card-event-${event.id}`} className="group cursor-pointer block">
                   <div className="relative aspect-video overflow-hidden mb-6 bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center">
                     <div className="text-4xl font-serif font-bold text-primary/30">{event.title.substring(0, 2).toUpperCase()}</div>
                     <div className="absolute bottom-4 right-4 bg-background p-3 text-center shadow-lg">
@@ -65,12 +66,10 @@ export default function MeetingsSection() {
                     {event.time && <div className="flex items-center gap-2"><Clock className="h-4 w-4 shrink-0" /><span>{event.time}</span></div>}
                     <div className="flex items-start gap-2"><MapPin className="h-4 w-4 shrink-0 mt-0.5" /><span>{event.location}</span></div>
                   </div>
-                  <Link to="/meetings">
-                    <span className="w-full border border-border/60 hover:bg-muted flex items-center justify-between py-2 px-4 text-sm font-medium transition-colors cursor-pointer">
-                      View Details & Map <ArrowRight className="h-4 w-4" />
-                    </span>
-                  </Link>
-                </div>
+                  <span className="w-full border border-border/60 hover:bg-muted flex items-center justify-between py-2 px-4 text-sm font-medium transition-colors cursor-pointer">
+                    View Details & Map <ArrowRight className="h-4 w-4" />
+                  </span>
+                </Link>
               );
             })}
           </div>

@@ -1,7 +1,9 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Play, Mic, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { fetchPodcasts, fetchLivestreams } from "../store/slices/mediaSlice";
+import { itemPath } from "../utils/slug";
 
 export default function MediaSection() {
   const dispatch = useDispatch();
@@ -79,7 +81,7 @@ export default function MediaSection() {
             ) : (
               <div className="space-y-4">
                 {podcasts.slice(0, 3).map((podcast) => (
-                  <div key={podcast.id} data-testid={`card-podcast-${podcast.id}`} className="flex items-center gap-4 bg-white/5 p-3 hover:bg-white/10 transition-colors cursor-pointer rounded-sm">
+                  <Link key={podcast.id} to={itemPath("podcasts", podcast.id, podcast.title)} data-testid={`card-podcast-${podcast.id}`} className="flex items-center gap-4 bg-white/5 p-3 hover:bg-white/10 transition-colors cursor-pointer rounded-sm">
                     <div className="w-10 h-10 bg-primary-foreground text-primary rounded-full flex items-center justify-center shrink-0">
                       <Play className="h-4 w-4 ml-0.5" />
                     </div>
@@ -87,7 +89,7 @@ export default function MediaSection() {
                       <p className="font-medium text-sm truncate text-white">{podcast.title}</p>
                       <p className="text-xs text-primary-foreground/60">{podcast.duration || "—"}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}

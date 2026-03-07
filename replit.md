@@ -111,6 +111,17 @@ shared/
 - `/connect` - Prayer requests, pastor applications, contact forms
 - `/login` - Login / Register / Forgot Password / Reset Password
 - `/profile` - User profile (edit profile, change password, account info)
+- `/books/:id/:slug?` - Book detail page
+- `/articles/:id/:slug?` - Article/blog post detail page
+- `/podcasts/:id/:slug?` - Podcast episode detail page
+- `/events/:id/:slug?` - Event/meeting detail page
+
+## Detail Page Routing
+- All cards (books, articles, podcasts, events) link to detail pages using SEO-friendly URLs
+- URL pattern: `/{type}/{id}/{slug}` where slug is auto-generated from title
+- Slug utility: `client/src/utils/slug.js` exports `toSlug()` and `itemPath()`
+- Cards are clickable on: image, title, description, and action buttons
+- Search results also link to detail pages (except Livestream which has no detail page)
 
 ## Key Features
 - Book search in both English and Telugu

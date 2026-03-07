@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ArrowRight, BookOpen } from "lucide-react";
+import { Link } from "react-router-dom";
 import { fetchBlogPosts } from "../store/slices/blogSlice";
 import { subscribeNewsletter, resetFormStatus } from "../store/slices/formsSlice";
+import { itemPath } from "../utils/slug";
 
 export default function DevotionalSection() {
   const dispatch = useDispatch();
@@ -46,15 +48,15 @@ export default function DevotionalSection() {
 
             {latestPost && (
               <div className="pt-4">
-                <div className="bg-muted/50 p-6 border-l-4 border-primary">
+                <Link to={itemPath("articles", latestPost.id, latestPost.title)} className="block bg-muted/50 p-6 border-l-4 border-primary hover:bg-muted/70 transition-colors">
                   <h4 className="font-bold mb-2" data-testid="text-latest-post-title">Today's Reading: {latestPost.title}</h4>
                   <p className="text-sm text-muted-foreground italic mb-4">
                     {latestPost.excerpt || latestPost.content.substring(0, 120) + "..."}
                   </p>
-                  <button className="text-sm font-semibold text-primary inline-flex items-center hover:gap-2 transition-all gap-1" data-testid="link-read-article">
+                  <span className="text-sm font-semibold text-primary inline-flex items-center hover:gap-2 transition-all gap-1" data-testid="link-read-article">
                     Read Full Article <ArrowRight className="h-3 w-3" />
-                  </button>
-                </div>
+                  </span>
+                </Link>
               </div>
             )}
           </div>

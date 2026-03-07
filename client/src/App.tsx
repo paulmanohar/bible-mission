@@ -1,8 +1,25 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { Provider, useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import store from "./store/store";
 import { fetchProfile } from "./store/slices/authSlice";
+
+function ScrollToTop() {
+  const { pathname, hash } = useLocation();
+
+  useLayoutEffect(() => {
+    if (hash) {
+      const el = document.getElementById(hash.slice(1));
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname, hash]);
+
+  return null;
+}
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -11,6 +28,10 @@ import ResourcesPage from "./pages/ResourcesPage";
 import MeetingsPage from "./pages/MeetingsPage";
 import ConnectPage from "./pages/ConnectPage";
 import SearchPage from "./pages/SearchPage";
+import BookDetailPage from "./pages/BookDetailPage";
+import ArticleDetailPage from "./pages/ArticleDetailPage";
+import PodcastDetailPage from "./pages/PodcastDetailPage";
+import EventDetailPage from "./pages/EventDetailPage";
 import NotFound from "./pages/not-found";
 
 function AuthBootstrap({ children }) {
@@ -30,6 +51,7 @@ function App() {
   return (
     <Provider store={store}>
       <BrowserRouter>
+        <ScrollToTop />
         <AuthBootstrap>
           <Routes>
             <Route path="/" element={<Home />} />
@@ -38,6 +60,10 @@ function App() {
             <Route path="/meetings" element={<MeetingsPage />} />
             <Route path="/connect" element={<ConnectPage />} />
             <Route path="/search" element={<SearchPage />} />
+            <Route path="/books/:id/:slug?" element={<BookDetailPage />} />
+            <Route path="/articles/:id/:slug?" element={<ArticleDetailPage />} />
+            <Route path="/podcasts/:id/:slug?" element={<PodcastDetailPage />} />
+            <Route path="/events/:id/:slug?" element={<EventDetailPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="*" element={<NotFound />} />

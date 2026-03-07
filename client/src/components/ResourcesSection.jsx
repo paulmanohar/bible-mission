@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Search } from "lucide-react";
 import { fetchBooks, setSearchQuery, setActiveLanguage } from "../store/slices/booksSlice";
 import { Link } from "react-router-dom";
+import { itemPath } from "../utils/slug";
 
 export default function ResourcesSection() {
   const dispatch = useDispatch();
@@ -69,10 +70,10 @@ export default function ResourcesSection() {
         ) : books.length === 0 ? (
           <div className="text-center py-16 text-muted-foreground"><p className="text-lg">No books found matching your search.</p></div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {books.slice(0, 4).map((book) => (
-              <div key={book.id} data-testid={`card-book-${book.id}`} className="border border-border/50 bg-background hover:border-primary/30 transition-colors shadow-sm hover:shadow-md">
-                <div className="aspect-[3/4] relative overflow-hidden bg-muted">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+            {books.slice(0, 5).map((book) => (
+              <Link key={book.id} to={itemPath("books", book.id, book.title)} data-testid={`card-book-${book.id}`} className="border border-border/50 bg-background hover:border-primary/30 transition-colors shadow-sm hover:shadow-md block">
+                <div className="aspect-[4/5] relative overflow-hidden bg-muted">
                   {book.imageId ? (
                     <img
                       src={`/assets/images/books/${book.imageId}.jpg`}
@@ -90,13 +91,13 @@ export default function ResourcesSection() {
                   )}
                   <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-sm px-2 py-1 text-xs font-medium">{book.language}</div>
                 </div>
-                <div className="p-5">
-                  <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{book.category}</p>
-                  <h3 className="font-serif text-xl font-bold mt-1 line-clamp-2">{book.title}</h3>
-                  <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{book.description}</p>
-                  <button className="mt-4 w-full border border-border py-2 text-sm font-medium hover:bg-muted transition-colors">Read Online</button>
+                <div className="p-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{book.category}</p>
+                  <h3 className="font-serif text-sm font-bold mt-1 line-clamp-2">{book.title}</h3>
+                  <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{book.description}</p>
+                  <span className="mt-2 w-full border border-border py-1.5 text-xs font-medium hover:bg-muted transition-colors block text-center">Read Online</span>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
         )}

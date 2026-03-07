@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { MapPin, Calendar, Clock, ArrowRight, Users, Info } from "lucide-react";
+import { Link } from "react-router-dom";
 import { fetchEvents, submitEvent, clearSubmitStatus } from "../store/slices/eventsSlice";
+import { itemPath } from "../utils/slug";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -159,15 +161,13 @@ export default function MeetingsPage() {
                 {events.map((event) => {
                   const { month, day } = formatDateShort(event.date);
                   return (
-                    <div key={event.id} data-testid={`card-event-${event.id}`} className="border border-border hover:border-primary/30 transition-colors group">
+                    <Link key={event.id} to={itemPath("events", event.id, event.title)} data-testid={`card-event-${event.id}`} className="border border-border hover:border-primary/30 transition-colors group block">
                       <div className="flex">
-                        {/* Date Badge */}
                         <div className="w-24 bg-primary text-primary-foreground flex flex-col items-center justify-center p-4 shrink-0">
                           <span className="text-xs font-bold uppercase tracking-wider opacity-80">{month}</span>
                           <span className="text-3xl font-serif font-bold leading-none mt-1">{day}</span>
                         </div>
 
-                        {/* Content */}
                         <div className="flex-1 p-6">
                           <h3 className="font-serif text-xl font-bold mb-3 group-hover:text-primary/80 transition-colors">{event.title}</h3>
                           {event.description && (
@@ -197,19 +197,17 @@ export default function MeetingsPage() {
                           </div>
 
                           {(event.latitude && event.longitude) && (
-                            <a
-                              href={`https://maps.google.com/?q=${event.latitude},${event.longitude}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1 mt-4 text-sm text-primary font-medium hover:underline"
+                            <span
+                              onClick={(e) => { e.preventDefault(); window.open(`https://maps.google.com/?q=${event.latitude},${event.longitude}`, '_blank'); }}
+                              className="inline-flex items-center gap-1 mt-4 text-sm text-primary font-medium hover:underline cursor-pointer"
                               data-testid={`link-map-${event.id}`}
                             >
                               <MapPin className="h-3 w-3" /> View on Google Maps <ArrowRight className="h-3 w-3" />
-                            </a>
+                            </span>
                           )}
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   );
                 })}
               </div>

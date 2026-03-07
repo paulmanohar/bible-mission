@@ -55,8 +55,14 @@ export const apiService = {
   getPodcasts() {
     return apiRequest("/podcasts");
   },
+  getPodcast(id) {
+    return apiRequest(`/podcasts/${id}`);
+  },
   getLivestreams() {
     return apiRequest("/livestreams");
+  },
+  getBlogPostById(id) {
+    return apiRequest(`/blog/id/${id}`);
   },
 
   // Forms

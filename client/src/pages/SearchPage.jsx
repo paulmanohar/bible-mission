@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -9,9 +9,9 @@ import {
   performSearch, setSearchQuery, toggleType, toggleCategory,
   toggleTag, setAuthorFilter, setSortBy, setPage, clearAllFilters,
 } from "../store/slices/searchSlice";
+import { itemPath } from "../utils/slug";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { useState } from "react";
 
 const typeIcons = {
   Book: BookOpen,
@@ -85,6 +85,8 @@ function FacetSection({ title, icon, items, activeItems, onToggle, showCount, de
   );
 }
 
+const typeToRoute = { Book: "books", Article: "articles", Podcast: "podcasts", Event: "events" };
+
 function SearchResultCard({ result }) {
   const Icon = typeIcons[result.sourceType] || FileText;
   const colorClass = typeColors[result.sourceType] || "bg-gray-100 text-gray-800";
@@ -93,69 +95,80 @@ function SearchResultCard({ result }) {
     if (result.metadata) metadata = JSON.parse(result.metadata);
   } catch {}
 
-  return (
-    <div className="border-b border-border/60 pb-6 mb-6 last:border-0 last:pb-0 last:mb-0" data-testid={`search-result-${result.sourceType}-${result.sourceId}`}>
-      <div className="flex gap-4">
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-2">
-            <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-sm ${colorClass}`}>
-              <Icon className="h-3 w-3" />
-              {result.sourceType.toUpperCase()}
-            </span>
-            {result.language && (
-              <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-sm">{result.language}</span>
-            )}
-            {metadata?.duration && (
-              <span className="text-xs text-muted-foreground">{metadata.duration}</span>
-            )}
-          </div>
+  const routeType = typeToRoute[result.sourceType];
+  const detailPath = routeType ? itemPath(routeType, result.sourceId, result.title) : null;
 
-          <h3 className="font-serif text-lg font-bold mb-1.5 hover:text-primary/80 transition-colors cursor-pointer">
-            {result.title}
-          </h3>
-
-          {result.description && (
-            <p className="text-sm text-muted-foreground line-clamp-2 mb-3 leading-relaxed">
-              {result.description}
-            </p>
+  const content = (
+    <div className="flex gap-4">
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-2 mb-2">
+          <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-xs font-semibold rounded-sm ${colorClass}`}>
+            <Icon className="h-3 w-3" />
+            {result.sourceType.toUpperCase()}
+          </span>
+          {result.language && (
+            <span className="text-xs px-2 py-0.5 bg-muted text-muted-foreground rounded-sm">{result.language}</span>
           )}
-
-          <div className="flex items-center flex-wrap gap-3 text-xs text-muted-foreground">
-            {result.author && (
-              <span className="flex items-center gap-1">
-                <User className="h-3 w-3" />
-                {result.author}
-              </span>
-            )}
-            {result.category && (
-              <span className="px-2 py-0.5 bg-muted/50 rounded-sm">{result.category}</span>
-            )}
-            {result.date && (
-              <span>{new Date(result.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
-            )}
-            {metadata?.location && (
-              <span className="truncate max-w-[200px]">{metadata.location}</span>
-            )}
-          </div>
-
-          {result.tags && result.tags.length > 0 && (
-            <div className="flex flex-wrap gap-1.5 mt-3">
-              {result.tags.slice(0, 5).map((tag) => (
-                <span key={tag} className="inline-flex items-center gap-0.5 text-xs px-2 py-0.5 bg-primary/5 text-primary/80 border border-primary/10 rounded-sm">
-                  <Tag className="h-2.5 w-2.5" />
-                  {tag}
-                </span>
-              ))}
-            </div>
+          {metadata?.duration && (
+            <span className="text-xs text-muted-foreground">{metadata.duration}</span>
           )}
         </div>
 
-        {result.imageUrl && (
-          <div className="w-24 h-32 bg-muted/50 shrink-0 overflow-hidden hidden sm:block">
-            <img src={`/assets/images/${result.imageUrl}`} alt="" className="w-full h-full object-cover" />
+        <h3 className="font-serif text-lg font-bold mb-1.5 hover:text-primary/80 transition-colors cursor-pointer">
+          {result.title}
+        </h3>
+
+        {result.description && (
+          <p className="text-sm text-muted-foreground line-clamp-2 mb-3 leading-relaxed">
+            {result.description}
+          </p>
+        )}
+
+        <div className="flex items-center flex-wrap gap-3 text-xs text-muted-foreground">
+          {result.author && (
+            <span className="flex items-center gap-1">
+              <User className="h-3 w-3" />
+              {result.author}
+            </span>
+          )}
+          {result.category && (
+            <span className="px-2 py-0.5 bg-muted/50 rounded-sm">{result.category}</span>
+          )}
+          {result.date && (
+            <span>{new Date(result.date).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })}</span>
+          )}
+          {metadata?.location && (
+            <span className="truncate max-w-[200px]">{metadata.location}</span>
+          )}
+        </div>
+
+        {result.tags && result.tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {result.tags.slice(0, 5).map((tag) => (
+              <span key={tag} className="inline-flex items-center gap-0.5 text-xs px-2 py-0.5 bg-primary/5 text-primary/80 border border-primary/10 rounded-sm">
+                <Tag className="h-2.5 w-2.5" />
+                {tag}
+              </span>
+            ))}
           </div>
         )}
       </div>
+
+      {result.imageUrl && (
+        <div className="w-24 h-32 bg-muted/50 shrink-0 overflow-hidden hidden sm:block">
+          <img src={`/assets/images/${result.imageUrl}`} alt="" className="w-full h-full object-cover" />
+        </div>
+      )}
+    </div>
+  );
+
+  return detailPath ? (
+    <Link to={detailPath} className="border-b border-border/60 pb-6 mb-6 last:border-0 last:pb-0 last:mb-0 block hover:bg-muted/30 -mx-2 px-2 py-2 rounded transition-colors" data-testid={`search-result-${result.sourceType}-${result.sourceId}`}>
+      {content}
+    </Link>
+  ) : (
+    <div className="border-b border-border/60 pb-6 mb-6 last:border-0 last:pb-0 last:mb-0" data-testid={`search-result-${result.sourceType}-${result.sourceId}`}>
+      {content}
     </div>
   );
 }

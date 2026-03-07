@@ -51,12 +51,15 @@ export interface IStorage {
 
   getBlogPosts(publishedOnly?: boolean): Promise<BlogPost[]>;
   getBlogPost(slug: string): Promise<BlogPost | undefined>;
+  getBlogPostById(id: number): Promise<BlogPost | undefined>;
   createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
 
   getPodcasts(publishedOnly?: boolean): Promise<Podcast[]>;
+  getPodcast(id: number): Promise<Podcast | undefined>;
   createPodcast(podcast: InsertPodcast): Promise<Podcast>;
 
   getLivestreams(): Promise<Livestream[]>;
+  getLivestream(id: number): Promise<Livestream | undefined>;
   createLivestream(ls: InsertLivestream): Promise<Livestream>;
 
   subscribeNewsletter(sub: InsertNewsletter): Promise<NewsletterSubscription>;
@@ -182,6 +185,11 @@ export class DatabaseStorage implements IStorage {
     return post;
   }
 
+  async getBlogPostById(id: number): Promise<BlogPost | undefined> {
+    const [post] = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+    return post;
+  }
+
   async createBlogPost(post: InsertBlogPost): Promise<BlogPost> {
     return insertAndReturn<BlogPost>(blogPosts, post);
   }
@@ -193,12 +201,22 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(podcasts).orderBy(desc(podcasts.createdAt));
   }
 
+  async getPodcast(id: number): Promise<Podcast | undefined> {
+    const [row] = await db.select().from(podcasts).where(eq(podcasts.id, id));
+    return row;
+  }
+
   async createPodcast(podcast: InsertPodcast): Promise<Podcast> {
     return insertAndReturn<Podcast>(podcasts, podcast);
   }
 
   async getLivestreams(): Promise<Livestream[]> {
     return db.select().from(livestreams);
+  }
+
+  async getLivestream(id: number): Promise<Livestream | undefined> {
+    const [row] = await db.select().from(livestreams).where(eq(livestreams.id, id));
+    return row;
   }
 
   async createLivestream(ls: InsertLivestream): Promise<Livestream> {
@@ -343,7 +361,8 @@ export class DatabaseStorage implements IStorage {
           like(searchIndex.title, `%${query}%`),
           like(searchIndex.description, `%${query}%`),
           like(searchIndex.author, `%${query}%`),
-          like(searchIndex.category, `%${query}%`)
+          like(searchIndex.category, `%${query}%`),
+          sql`JSON_SEARCH(${searchIndex.tags}, 'one', ${`%${query}%`}) IS NOT NULL`
         )
       );
     }
@@ -402,7 +421,8 @@ export class DatabaseStorage implements IStorage {
           like(searchIndex.title, `%${query}%`),
           like(searchIndex.description, `%${query}%`),
           like(searchIndex.author, `%${query}%`),
-          like(searchIndex.category, `%${query}%`)
+          like(searchIndex.category, `%${query}%`),
+          sql`JSON_SEARCH(${searchIndex.tags}, 'one', ${`%${query}%`}) IS NOT NULL`
         )
       : undefined;
 

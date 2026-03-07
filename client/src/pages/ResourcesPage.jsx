@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Search, BookOpen, Filter, ArrowRight } from "lucide-react";
+import { Link } from "react-router-dom";
 import { fetchBooks, setSearchQuery, setActiveLanguage } from "../store/slices/booksSlice";
 import { fetchBlogPosts } from "../store/slices/blogSlice";
 import { fetchPodcasts } from "../store/slices/mediaSlice";
 import { subscribeNewsletter, resetFormStatus } from "../store/slices/formsSlice";
+import { itemPath } from "../utils/slug";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
@@ -131,10 +133,10 @@ export default function ResourcesPage() {
 
             {/* Books Grid */}
             {booksLoading ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {[1, 2, 3, 4].map((i) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {[1, 2, 3, 4, 5].map((i) => (
                   <div key={i} className="border bg-muted/30 animate-pulse">
-                    <div className="aspect-[3/4] bg-muted" />
+                    <div className="aspect-[4/5] bg-muted" />
                     <div className="p-5 space-y-3">
                       <div className="h-4 bg-muted rounded w-1/3" />
                       <div className="h-6 bg-muted rounded w-3/4" />
@@ -149,10 +151,10 @@ export default function ResourcesPage() {
                 <p className="text-sm">Try adjusting your search or filters</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {filteredBooks.map((book) => (
-                  <div key={book.id} data-testid={`card-book-${book.id}`} className="border border-border/50 bg-background hover:border-primary/30 transition-colors shadow-sm hover:shadow-md group">
-                    <div className="aspect-[3/4] relative overflow-hidden bg-muted">
+                  <Link key={book.id} to={itemPath("books", book.id, book.title)} data-testid={`card-book-${book.id}`} className="border border-border/50 bg-background hover:border-primary/30 transition-colors shadow-sm hover:shadow-md group block">
+                    <div className="aspect-[4/5] relative overflow-hidden bg-muted">
                       {book.imageId ? (
                         <img
                           src={`/assets/images/books/${book.imageId}.jpg`}
@@ -172,15 +174,15 @@ export default function ResourcesPage() {
                         {book.language}
                       </div>
                     </div>
-                    <div className="p-5">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">{book.category}</p>
-                      <h3 className="font-serif text-xl font-bold mt-1 line-clamp-2 group-hover:text-primary/80 transition-colors">{book.title}</h3>
-                      <p className="text-sm text-muted-foreground mt-2 line-clamp-2">{book.description}</p>
-                      <button data-testid={`button-read-${book.id}`} className="mt-4 w-full border border-border py-2 text-sm font-medium hover:bg-muted transition-colors">
+                    <div className="p-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">{book.category}</p>
+                      <h3 className="font-serif text-sm font-bold mt-1 line-clamp-2 group-hover:text-primary/80 transition-colors">{book.title}</h3>
+                      <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{book.description}</p>
+                      <span data-testid={`button-read-${book.id}`} className="mt-2 w-full border border-border py-1.5 text-xs font-medium hover:bg-muted transition-colors block text-center">
                         Read Online
-                      </button>
+                      </span>
                     </div>
-                  </div>
+                  </Link>
                 ))}
               </div>
             )}
@@ -210,17 +212,17 @@ export default function ResourcesPage() {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {posts.map((post) => (
-                  <article key={post.id} data-testid={`card-blog-${post.id}`} className="bg-background border p-8 hover:border-primary/30 transition-colors group">
+                  <Link key={post.id} to={itemPath("articles", post.id, post.title)} data-testid={`card-blog-${post.id}`} className="bg-background border p-8 hover:border-primary/30 transition-colors group block">
                     <p className="text-xs font-semibold uppercase tracking-wider text-primary mb-3">{post.category}</p>
                     <h3 className="font-serif text-xl font-bold mb-3 group-hover:text-primary/80 transition-colors line-clamp-2">{post.title}</h3>
                     <p className="text-sm text-muted-foreground mb-4 line-clamp-3">{post.excerpt || post.content.substring(0, 150) + "..."}</p>
                     <div className="flex items-center justify-between text-sm">
                       <span className="text-muted-foreground">{post.author}</span>
-                      <button className="text-primary font-medium inline-flex items-center gap-1 hover:gap-2 transition-all" data-testid={`link-read-post-${post.id}`}>
+                      <span className="text-primary font-medium inline-flex items-center gap-1 group-hover:gap-2 transition-all" data-testid={`link-read-post-${post.id}`}>
                         Read More <ArrowRight className="h-3 w-3" />
-                      </button>
+                      </span>
                     </div>
-                  </article>
+                  </Link>
                 ))}
               </div>
             )}
@@ -241,7 +243,7 @@ export default function ResourcesPage() {
                 ))
               ) : (
                 podcasts.map((podcast) => (
-                  <div key={podcast.id} data-testid={`card-podcast-${podcast.id}`} className="flex items-center gap-4 bg-white/5 p-4 hover:bg-white/10 transition-colors cursor-pointer rounded-sm">
+                  <Link key={podcast.id} to={itemPath("podcasts", podcast.id, podcast.title)} data-testid={`card-podcast-${podcast.id}`} className="flex items-center gap-4 bg-white/5 p-4 hover:bg-white/10 transition-colors cursor-pointer rounded-sm">
                     <div className="w-12 h-12 bg-white text-primary rounded-full flex items-center justify-center shrink-0">
                       <span className="ml-0.5">▶</span>
                     </div>
@@ -249,7 +251,7 @@ export default function ResourcesPage() {
                       <p className="font-medium truncate">{podcast.title}</p>
                       <p className="text-sm text-primary-foreground/60">{podcast.duration || "—"} • {podcast.description?.substring(0, 60)}</p>
                     </div>
-                  </div>
+                  </Link>
                 ))
               )}
             </div>
