@@ -134,6 +134,18 @@ shared/
 - Tables with source fields: books, blogPosts, podcasts, livestreams, events
 - Each detail page renders MediaRenderer when `sourceUrl` is present
 
+## Admin Panel
+- Accessible at `/admin/login` with admin credentials (role="admin" users only)
+- Admin token stored separately in localStorage as `bm_admin_token`
+- Admin API routes: `/api/admin/*` protected by `adminMiddleware` (JWT + role check)
+- Full CRUD for: Books, Blog Posts (Articles), Podcasts, Events, Livestreams
+- Admin dashboard shows content counts
+- Dark sidebar layout with professional content management forms
+- Login supports both username and email
+- Admin pages: `client/src/pages/admin/`
+- Admin Redux slice: `client/src/store/slices/adminSlice.js`
+- Admin API methods: `adminApiService` in `client/src/services/api.js`
+
 ## Key Features
 - Book search in both English and Telugu
 - Upcoming meetings with pin locations and Google Maps links

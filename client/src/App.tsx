@@ -33,6 +33,14 @@ import ArticleDetailPage from "./pages/ArticleDetailPage";
 import PodcastDetailPage from "./pages/PodcastDetailPage";
 import EventDetailPage from "./pages/EventDetailPage";
 import NotFound from "./pages/not-found";
+import AdminLoginPage from "./pages/admin/AdminLoginPage";
+import AdminLayout from "./pages/admin/AdminLayout";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminBooksPage from "./pages/admin/AdminBooksPage";
+import AdminArticlesPage from "./pages/admin/AdminArticlesPage";
+import AdminPodcastsPage from "./pages/admin/AdminPodcastsPage";
+import AdminEventsPage from "./pages/admin/AdminEventsPage";
+import AdminLivestreamsPage from "./pages/admin/AdminLivestreamsPage";
 
 function AuthBootstrap({ children }) {
   const dispatch = useDispatch();
@@ -66,6 +74,15 @@ function App() {
             <Route path="/events/:id/:slug?" element={<EventDetailPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/admin/login" element={<AdminLoginPage />} />
+            <Route path="/admin" element={<AdminLayout />}>
+              <Route index element={<AdminDashboard />} />
+              <Route path="books" element={<AdminBooksPage />} />
+              <Route path="articles" element={<AdminArticlesPage />} />
+              <Route path="podcasts" element={<AdminPodcastsPage />} />
+              <Route path="events" element={<AdminEventsPage />} />
+              <Route path="livestreams" element={<AdminLivestreamsPage />} />
+            </Route>
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthBootstrap>

@@ -41,10 +41,14 @@ export interface IStorage {
   getBooks(query?: string, language?: string): Promise<Book[]>;
   getBook(id: number): Promise<Book | undefined>;
   createBook(book: InsertBook): Promise<Book>;
+  updateBook(id: number, data: Partial<InsertBook>): Promise<Book | undefined>;
+  deleteBook(id: number): Promise<void>;
 
   getEvents(approvedOnly?: boolean): Promise<Event[]>;
   getEvent(id: number): Promise<Event | undefined>;
   createEvent(event: InsertEvent): Promise<Event>;
+  updateEvent(id: number, data: Partial<InsertEvent>): Promise<Event | undefined>;
+  deleteEvent(id: number): Promise<void>;
 
   createPrayerRequest(req: InsertPrayerRequest): Promise<PrayerRequest>;
   getPrayerRequests(): Promise<PrayerRequest[]>;
@@ -53,14 +57,20 @@ export interface IStorage {
   getBlogPost(slug: string): Promise<BlogPost | undefined>;
   getBlogPostById(id: number): Promise<BlogPost | undefined>;
   createBlogPost(post: InsertBlogPost): Promise<BlogPost>;
+  updateBlogPost(id: number, data: Partial<InsertBlogPost>): Promise<BlogPost | undefined>;
+  deleteBlogPost(id: number): Promise<void>;
 
   getPodcasts(publishedOnly?: boolean): Promise<Podcast[]>;
   getPodcast(id: number): Promise<Podcast | undefined>;
   createPodcast(podcast: InsertPodcast): Promise<Podcast>;
+  updatePodcast(id: number, data: Partial<InsertPodcast>): Promise<Podcast | undefined>;
+  deletePodcast(id: number): Promise<void>;
 
   getLivestreams(): Promise<Livestream[]>;
   getLivestream(id: number): Promise<Livestream | undefined>;
   createLivestream(ls: InsertLivestream): Promise<Livestream>;
+  updateLivestream(id: number, data: Partial<InsertLivestream>): Promise<Livestream | undefined>;
+  deleteLivestream(id: number): Promise<void>;
 
   subscribeNewsletter(sub: InsertNewsletter): Promise<NewsletterSubscription>;
 
@@ -149,6 +159,16 @@ export class DatabaseStorage implements IStorage {
     return insertAndReturn<Book>(books, book);
   }
 
+  async updateBook(id: number, data: Partial<InsertBook>): Promise<Book | undefined> {
+    await db.update(books).set(data).where(eq(books.id, id));
+    const [updated] = await db.select().from(books).where(eq(books.id, id));
+    return updated;
+  }
+
+  async deleteBook(id: number): Promise<void> {
+    await db.delete(books).where(eq(books.id, id));
+  }
+
   async getEvents(approvedOnly = true): Promise<Event[]> {
     if (approvedOnly) {
       return db.select().from(events).where(eq(events.approved, true));
@@ -163,6 +183,16 @@ export class DatabaseStorage implements IStorage {
 
   async createEvent(event: InsertEvent): Promise<Event> {
     return insertAndReturn<Event>(events, event);
+  }
+
+  async updateEvent(id: number, data: Partial<InsertEvent>): Promise<Event | undefined> {
+    await db.update(events).set(data).where(eq(events.id, id));
+    const [updated] = await db.select().from(events).where(eq(events.id, id));
+    return updated;
+  }
+
+  async deleteEvent(id: number): Promise<void> {
+    await db.delete(events).where(eq(events.id, id));
   }
 
   async createPrayerRequest(req: InsertPrayerRequest): Promise<PrayerRequest> {
@@ -194,6 +224,16 @@ export class DatabaseStorage implements IStorage {
     return insertAndReturn<BlogPost>(blogPosts, post);
   }
 
+  async updateBlogPost(id: number, data: Partial<InsertBlogPost>): Promise<BlogPost | undefined> {
+    await db.update(blogPosts).set(data).where(eq(blogPosts.id, id));
+    const [updated] = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+    return updated;
+  }
+
+  async deleteBlogPost(id: number): Promise<void> {
+    await db.delete(blogPosts).where(eq(blogPosts.id, id));
+  }
+
   async getPodcasts(publishedOnly = true): Promise<Podcast[]> {
     if (publishedOnly) {
       return db.select().from(podcasts).where(eq(podcasts.published, true)).orderBy(desc(podcasts.createdAt));
@@ -210,6 +250,16 @@ export class DatabaseStorage implements IStorage {
     return insertAndReturn<Podcast>(podcasts, podcast);
   }
 
+  async updatePodcast(id: number, data: Partial<InsertPodcast>): Promise<Podcast | undefined> {
+    await db.update(podcasts).set(data).where(eq(podcasts.id, id));
+    const [updated] = await db.select().from(podcasts).where(eq(podcasts.id, id));
+    return updated;
+  }
+
+  async deletePodcast(id: number): Promise<void> {
+    await db.delete(podcasts).where(eq(podcasts.id, id));
+  }
+
   async getLivestreams(): Promise<Livestream[]> {
     return db.select().from(livestreams);
   }
@@ -221,6 +271,16 @@ export class DatabaseStorage implements IStorage {
 
   async createLivestream(ls: InsertLivestream): Promise<Livestream> {
     return insertAndReturn<Livestream>(livestreams, ls);
+  }
+
+  async updateLivestream(id: number, data: Partial<InsertLivestream>): Promise<Livestream | undefined> {
+    await db.update(livestreams).set(data).where(eq(livestreams.id, id));
+    const [updated] = await db.select().from(livestreams).where(eq(livestreams.id, id));
+    return updated;
+  }
+
+  async deleteLivestream(id: number): Promise<void> {
+    await db.delete(livestreams).where(eq(livestreams.id, id));
   }
 
   async subscribeNewsletter(sub: InsertNewsletter): Promise<NewsletterSubscription> {

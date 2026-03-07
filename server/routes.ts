@@ -47,6 +47,24 @@ function authMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
   }
 }
 
+async function adminMiddleware(req: AuthRequest, res: Response, next: NextFunction) {
+  const header = req.headers.authorization;
+  if (!header || !header.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Authentication required" });
+  }
+  try {
+    const decoded = jwt.verify(header.split(" ")[1], JWT_SECRET) as { userId: number };
+    req.userId = decoded.userId;
+    const user = await storage.getUser(decoded.userId);
+    if (!user || user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    next();
+  } catch {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+}
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -228,7 +246,10 @@ export async function registerRoutes(
   app.post("/api/auth/login", async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) return res.status(400).json({ message: "Username and password required" });
-    const user = await storage.getUserByUsername(username);
+    let user = await storage.getUserByUsername(username);
+    if (!user && username.includes("@")) {
+      user = await storage.getUserByEmail(username);
+    }
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
@@ -311,6 +332,142 @@ export async function registerRoutes(
     const hashed = await bcrypt.hash(newPassword, 12);
     await storage.updateUser(req.userId!, { password: hashed });
     res.json({ message: "Password changed successfully" });
+  });
+
+  // ── Admin: Books ──
+  app.get("/api/admin/books", adminMiddleware as any, async (_req, res) => {
+    const allBooks = await storage.getBooks();
+    res.json(allBooks);
+  });
+
+  app.post("/api/admin/books", adminMiddleware as any, async (req, res) => {
+    const parsed = insertBookSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const book = await storage.createBook(parsed.data);
+    res.status(201).json(book);
+  });
+
+  app.put("/api/admin/books/:id", adminMiddleware as any, async (req, res) => {
+    const parsed = insertBookSchema.partial().safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const updated = await storage.updateBook(Number(req.params.id), parsed.data);
+    if (!updated) return res.status(404).json({ message: "Book not found" });
+    res.json(updated);
+  });
+
+  app.delete("/api/admin/books/:id", adminMiddleware as any, async (req, res) => {
+    await storage.deleteBook(Number(req.params.id));
+    res.json({ message: "Book deleted" });
+  });
+
+  // ── Admin: Events ──
+  app.get("/api/admin/events", adminMiddleware as any, async (_req, res) => {
+    const allEvents = await storage.getEvents(false);
+    res.json(allEvents);
+  });
+
+  app.post("/api/admin/events", adminMiddleware as any, async (req, res) => {
+    const parsed = insertEventSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const event = await storage.createEvent(parsed.data);
+    res.status(201).json(event);
+  });
+
+  app.put("/api/admin/events/:id", adminMiddleware as any, async (req, res) => {
+    const parsed = insertEventSchema.partial().safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const updated = await storage.updateEvent(Number(req.params.id), parsed.data);
+    if (!updated) return res.status(404).json({ message: "Event not found" });
+    res.json(updated);
+  });
+
+  app.delete("/api/admin/events/:id", adminMiddleware as any, async (req, res) => {
+    await storage.deleteEvent(Number(req.params.id));
+    res.json({ message: "Event deleted" });
+  });
+
+  // ── Admin: Blog Posts ──
+  app.get("/api/admin/blog", adminMiddleware as any, async (_req, res) => {
+    const allPosts = await storage.getBlogPosts(false);
+    res.json(allPosts);
+  });
+
+  app.post("/api/admin/blog", adminMiddleware as any, async (req, res) => {
+    const parsed = insertBlogPostSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const post = await storage.createBlogPost(parsed.data);
+    res.status(201).json(post);
+  });
+
+  app.put("/api/admin/blog/:id", adminMiddleware as any, async (req, res) => {
+    const parsed = insertBlogPostSchema.partial().safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const updated = await storage.updateBlogPost(Number(req.params.id), parsed.data);
+    if (!updated) return res.status(404).json({ message: "Blog post not found" });
+    res.json(updated);
+  });
+
+  app.delete("/api/admin/blog/:id", adminMiddleware as any, async (req, res) => {
+    await storage.deleteBlogPost(Number(req.params.id));
+    res.json({ message: "Blog post deleted" });
+  });
+
+  // ── Admin: Podcasts ──
+  app.get("/api/admin/podcasts", adminMiddleware as any, async (_req, res) => {
+    const allPodcasts = await storage.getPodcasts(false);
+    res.json(allPodcasts);
+  });
+
+  app.post("/api/admin/podcasts", adminMiddleware as any, async (req, res) => {
+    const parsed = insertPodcastSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const podcast = await storage.createPodcast(parsed.data);
+    res.status(201).json(podcast);
+  });
+
+  app.put("/api/admin/podcasts/:id", adminMiddleware as any, async (req, res) => {
+    const parsed = insertPodcastSchema.partial().safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const updated = await storage.updatePodcast(Number(req.params.id), parsed.data);
+    if (!updated) return res.status(404).json({ message: "Podcast not found" });
+    res.json(updated);
+  });
+
+  app.delete("/api/admin/podcasts/:id", adminMiddleware as any, async (req, res) => {
+    await storage.deletePodcast(Number(req.params.id));
+    res.json({ message: "Podcast deleted" });
+  });
+
+  // ── Admin: Livestreams ──
+  app.get("/api/admin/livestreams", adminMiddleware as any, async (_req, res) => {
+    const allStreams = await storage.getLivestreams();
+    res.json(allStreams);
+  });
+
+  app.post("/api/admin/livestreams", adminMiddleware as any, async (req, res) => {
+    const parsed = insertLivestreamSchema.safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const stream = await storage.createLivestream(parsed.data);
+    res.status(201).json(stream);
+  });
+
+  app.put("/api/admin/livestreams/:id", adminMiddleware as any, async (req, res) => {
+    const parsed = insertLivestreamSchema.partial().safeParse(req.body);
+    if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });
+    const updated = await storage.updateLivestream(Number(req.params.id), parsed.data);
+    if (!updated) return res.status(404).json({ message: "Livestream not found" });
+    res.json(updated);
+  });
+
+  app.delete("/api/admin/livestreams/:id", adminMiddleware as any, async (req, res) => {
+    await storage.deleteLivestream(Number(req.params.id));
+    res.json({ message: "Livestream deleted" });
+  });
+
+  // ── Admin: Search Index Rebuild ──
+  app.post("/api/admin/search/rebuild", adminMiddleware as any, async (_req, res) => {
+    await storage.rebuildSearchIndex();
+    res.json({ message: "Search index rebuilt successfully" });
   });
 
   return httpServer;

@@ -6,6 +6,7 @@ import mediaReducer from "./slices/mediaSlice";
 import authReducer from "./slices/authSlice";
 import formsReducer from "./slices/formsSlice";
 import searchReducer from "./slices/searchSlice";
+import adminReducer from "./slices/adminSlice";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     auth: authReducer,
     forms: formsReducer,
     search: searchReducer,
+    admin: adminReducer,
   },
 });
 

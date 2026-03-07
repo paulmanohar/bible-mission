@@ -117,3 +117,97 @@ export const apiService = {
     return apiRequest("/auth/change-password", { method: "PUT", body: JSON.stringify({ currentPassword, newPassword }) });
   },
 };
+
+function getAdminAuthHeaders() {
+  const token = localStorage.getItem("bm_admin_token");
+  const headers = { "Content-Type": "application/json" };
+  if (token) headers["Authorization"] = `Bearer ${token}`;
+  return headers;
+}
+
+async function adminApiRequest(url, options = {}) {
+  const res = await fetch(`${BASE_URL}${url}`, {
+    headers: getAdminAuthHeaders(),
+    ...options,
+  });
+  if (!res.ok) {
+    const body = await res.json().catch(() => ({ message: res.statusText }));
+    throw new Error(body.message || "Request failed");
+  }
+  return res.json();
+}
+
+export const adminApiService = {
+  adminLogin(username, password) {
+    return apiRequest("/auth/login", { method: "POST", body: JSON.stringify({ username, password }) });
+  },
+
+  adminGetBooks() {
+    return adminApiRequest("/admin/books");
+  },
+  adminCreateBook(data) {
+    return adminApiRequest("/admin/books", { method: "POST", body: JSON.stringify(data) });
+  },
+  adminUpdateBook(id, data) {
+    return adminApiRequest(`/admin/books/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  },
+  adminDeleteBook(id) {
+    return adminApiRequest(`/admin/books/${id}`, { method: "DELETE" });
+  },
+
+  adminGetEvents() {
+    return adminApiRequest("/admin/events");
+  },
+  adminCreateEvent(data) {
+    return adminApiRequest("/admin/events", { method: "POST", body: JSON.stringify(data) });
+  },
+  adminUpdateEvent(id, data) {
+    return adminApiRequest(`/admin/events/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  },
+  adminDeleteEvent(id) {
+    return adminApiRequest(`/admin/events/${id}`, { method: "DELETE" });
+  },
+
+  adminGetBlogPosts() {
+    return adminApiRequest("/admin/blog");
+  },
+  adminCreateBlogPost(data) {
+    return adminApiRequest("/admin/blog", { method: "POST", body: JSON.stringify(data) });
+  },
+  adminUpdateBlogPost(id, data) {
+    return adminApiRequest(`/admin/blog/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  },
+  adminDeleteBlogPost(id) {
+    return adminApiRequest(`/admin/blog/${id}`, { method: "DELETE" });
+  },
+
+  adminGetPodcasts() {
+    return adminApiRequest("/admin/podcasts");
+  },
+  adminCreatePodcast(data) {
+    return adminApiRequest("/admin/podcasts", { method: "POST", body: JSON.stringify(data) });
+  },
+  adminUpdatePodcast(id, data) {
+    return adminApiRequest(`/admin/podcasts/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  },
+  adminDeletePodcast(id) {
+    return adminApiRequest(`/admin/podcasts/${id}`, { method: "DELETE" });
+  },
+
+  adminGetLivestreams() {
+    return adminApiRequest("/admin/livestreams");
+  },
+  adminCreateLivestream(data) {
+    return adminApiRequest("/admin/livestreams", { method: "POST", body: JSON.stringify(data) });
+  },
+  adminUpdateLivestream(id, data) {
+    return adminApiRequest(`/admin/livestreams/${id}`, { method: "PUT", body: JSON.stringify(data) });
+  },
+  adminDeleteLivestream(id) {
+    return adminApiRequest(`/admin/livestreams/${id}`, { method: "DELETE" });
+  },
+
+  adminRebuildSearchIndex() {
+    return adminApiRequest("/admin/search/rebuild", { method: "POST" });
+  },
+};
