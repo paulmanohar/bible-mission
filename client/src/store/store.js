@@ -7,6 +7,7 @@ import authReducer from "./slices/authSlice";
 import formsReducer from "./slices/formsSlice";
 import searchReducer from "./slices/searchSlice";
 import adminReducer from "./slices/adminSlice";
+import themeReducer from "./slices/themeSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     forms: formsReducer,
     search: searchReducer,
     admin: adminReducer,
+    theme: themeReducer,
   },
 });
 

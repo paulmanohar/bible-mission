@@ -3,7 +3,8 @@ import Footer from "../components/Footer";
 import Hero from "../components/Hero";
 import ResourcesSection from "../components/ResourcesSection";
 import MeetingsSection from "../components/MeetingsSection";
-import MediaSection from "../components/MediaSection";
+import BroadcastSection from "../components/BroadcastSection";
+import PodcastSection from "../components/PodcastSection";
 import DevotionalSection from "../components/DevotionalSection";
 import CTASection from "../components/CTASection";
 
@@ -15,7 +16,8 @@ export default function Home() {
         <Hero />
         <ResourcesSection />
         <MeetingsSection />
-        <MediaSection />
+        <BroadcastSection />
+        <PodcastSection />
         <DevotionalSection />
         <CTASection />
       </main>

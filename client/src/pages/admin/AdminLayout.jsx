@@ -9,7 +9,7 @@ const navItems = [
   { label: "Articles", path: "/admin/articles", icon: "📝" },
   { label: "Podcasts", path: "/admin/podcasts", icon: "🎙️" },
   { label: "Events", path: "/admin/events", icon: "📅" },
-  { label: "Livestreams", path: "/admin/livestreams", icon: "📡" },
+  { label: "Broadcasts", path: "/admin/livestreams", icon: "📡" },
 ];
 
 export default function AdminLayout() {

@@ -32,6 +32,7 @@ import BookDetailPage from "./pages/BookDetailPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
 import PodcastDetailPage from "./pages/PodcastDetailPage";
 import EventDetailPage from "./pages/EventDetailPage";
+import BroadcastDetailPage from "./pages/BroadcastDetailPage";
 import NotFound from "./pages/not-found";
 import AdminLoginPage from "./pages/admin/AdminLoginPage";
 import AdminLayout from "./pages/admin/AdminLayout";
@@ -72,6 +73,7 @@ function App() {
             <Route path="/articles/:id/:slug?" element={<ArticleDetailPage />} />
             <Route path="/podcasts/:id/:slug?" element={<PodcastDetailPage />} />
             <Route path="/events/:id/:slug?" element={<EventDetailPage />} />
+            <Route path="/broadcasts/:id/:slug?" element={<BroadcastDetailPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/admin/login" element={<AdminLoginPage />} />

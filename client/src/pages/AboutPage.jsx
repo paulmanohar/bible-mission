@@ -47,7 +47,7 @@ export default function AboutPage() {
 
         {/* Our Story */}
         <section className="py-20 bg-background">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
                 <h2 className="text-3xl md:text-4xl font-serif font-bold mb-6">Our Story</h2>
@@ -84,7 +84,7 @@ export default function AboutPage() {
 
         {/* Our Values */}
         <section className="py-20 bg-muted/30">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-16">
               <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4">Our Values</h2>
               <p className="text-muted-foreground text-lg">The core principles that guide everything we do.</p>
@@ -108,7 +108,7 @@ export default function AboutPage() {
 
         {/* Timeline */}
         <section className="py-20 bg-background">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl md:text-4xl font-serif font-bold mb-16 text-center">Our Journey</h2>
             <div className="max-w-3xl mx-auto space-y-0">
               {milestones.map((item, i) => (
@@ -131,7 +131,7 @@ export default function AboutPage() {
 
         {/* Leadership */}
         <section className="py-20 bg-primary text-primary-foreground">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl md:text-4xl font-serif font-bold mb-16 text-center">Leadership</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
               {leaders.map((leader, i) => (

@@ -61,6 +61,9 @@ export const apiService = {
   getLivestreams() {
     return apiRequest("/livestreams");
   },
+  getLivestream(id) {
+    return apiRequest(`/livestreams/${id}`);
+  },
   getBlogPostById(id) {
     return apiRequest(`/blog/id/${id}`);
   },

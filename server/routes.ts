@@ -168,6 +168,12 @@ export async function registerRoutes(
     res.json(streams);
   });
 
+  app.get("/api/livestreams/:id", async (req, res) => {
+    const stream = await storage.getLivestream(Number(req.params.id));
+    if (!stream) return res.status(404).json({ message: "Broadcast not found" });
+    res.json(stream);
+  });
+
   app.post("/api/livestreams", async (req, res) => {
     const parsed = insertLivestreamSchema.safeParse(req.body);
     if (!parsed.success) return res.status(400).json({ message: fromError(parsed.error).toString() });

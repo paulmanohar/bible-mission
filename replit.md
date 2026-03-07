@@ -25,7 +25,8 @@ client/src/
 │   ├── Hero.jsx      # Hero banner section
 │   ├── ResourcesSection.jsx  # Books library with search & language tabs
 │   ├── MeetingsSection.jsx   # Upcoming events
-│   ├── MediaSection.jsx      # Livestreams & podcasts
+│   ├── BroadcastSection.jsx  # Live & upcoming broadcasts (separate section)
+│   ├── PodcastSection.jsx   # Daily Bread podcast episodes (separate section)
 │   ├── DevotionalSection.jsx # Blog posts & newsletter subscribe
 │   ├── CTASection.jsx        # Prayer requests, join as member/pastor
 │   └── Footer.jsx    # Footer with bank details, links, contacts
@@ -115,13 +116,14 @@ shared/
 - `/articles/:id/:slug?` - Article/blog post detail page
 - `/podcasts/:id/:slug?` - Podcast episode detail page
 - `/events/:id/:slug?` - Event/meeting detail page
+- `/broadcasts/:id/:slug?` - Broadcast detail page
 
 ## Detail Page Routing
-- All cards (books, articles, podcasts, events) link to detail pages using SEO-friendly URLs
+- All cards (books, articles, podcasts, events, broadcasts) link to detail pages using SEO-friendly URLs
 - URL pattern: `/{type}/{id}/{slug}` where slug is auto-generated from title
 - Slug utility: `client/src/utils/slug.js` exports `toSlug()` and `itemPath()`
 - Cards are clickable on: image, title, description, and action buttons
-- Search results also link to detail pages (except Livestream which has no detail page)
+- Broadcasts use `/broadcasts/:id/:slug` URL but fetch from `/api/livestreams/:id` backend route
 
 ## Media Components
 - `client/src/components/media/` contains 4 media viewers + a switcher:
@@ -138,7 +140,7 @@ shared/
 - Accessible at `/admin/login` with admin credentials (role="admin" users only)
 - Admin token stored separately in localStorage as `bm_admin_token`
 - Admin API routes: `/api/admin/*` protected by `adminMiddleware` (JWT + role check)
-- Full CRUD for: Books, Blog Posts (Articles), Podcasts, Events, Livestreams
+- Full CRUD for: Books, Blog Posts (Articles), Podcasts, Events, Broadcasts (Livestreams)
 - Admin dashboard shows content counts
 - Dark sidebar layout with professional content management forms
 - Login supports both username and email
@@ -149,7 +151,8 @@ shared/
 ## Key Features
 - Book search in both English and Telugu
 - Upcoming meetings with pin locations and Google Maps links
-- Livestream & podcast sections
+- Broadcast section (segregated from podcasts, "Livestream" renamed to "Broadcast" in UI)
+- Podcast section (separate from broadcasts)
 - Prayer request system with 24/7 helpline info
 - Newsletter subscription
 - Pastor/Member registration

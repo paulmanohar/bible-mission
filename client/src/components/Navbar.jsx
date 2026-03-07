@@ -1,7 +1,39 @@
-import { Link, useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { Menu, X, User, Search } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { Menu, X, User, Search, Palette, Check } from "lucide-react";
 import { useState, useEffect } from "react";
+import ThemeSwitcher from "./ThemeSwitcher";
+import { setTheme } from "../store/slices/themeSlice";
+
+const mobilePreviewColors = {
+  classic: "bg-[hsl(215,25%,15%)]",
+  blue: "bg-[hsl(217,71%,45%)]",
+  green: "bg-[hsl(152,55%,28%)]",
+};
+
+function MobileThemePicker() {
+  const dispatch = useDispatch();
+  const { active, themes } = useSelector((s) => s.theme);
+  return (
+    <div className="flex items-center gap-2 py-2">
+      <Palette className="h-4 w-4 text-muted-foreground shrink-0" />
+      <span className="text-sm text-muted-foreground mr-1">Theme:</span>
+      {themes.map((t) => (
+        <button
+          key={t.key}
+          onClick={() => dispatch(setTheme(t.key))}
+          data-testid={`button-mobile-theme-${t.key}`}
+          className={`w-8 h-8 rounded-full border-2 flex items-center justify-center transition-all ${mobilePreviewColors[t.key]} ${
+            active === t.key ? "border-foreground scale-110" : "border-transparent opacity-70 hover:opacity-100"
+          }`}
+          title={t.label}
+        >
+          {active === t.key && <Check className="h-3.5 w-3.5 text-white" />}
+        </button>
+      ))}
+    </div>
+  );
+}
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -20,6 +52,7 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "About Us", href: "/about" },
     { label: "Resources", href: "/resources" },
+    { label: "Broadcasts", href: "/#broadcasts" },
     { label: "Meetings", href: "/meetings" },
     { label: "Connect", href: "/connect" },
   ];
@@ -29,7 +62,7 @@ export default function Navbar() {
   return (
     <>
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
           <button
             className="md:hidden mr-2 p-2 hover:bg-muted rounded transition-colors"
             onClick={() => setMobileOpen(true)}
@@ -52,7 +85,8 @@ export default function Navbar() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1 sm:gap-3">
+            <ThemeSwitcher />
             <Link to="/search">
               <span className="p-2 hover:bg-muted rounded transition-colors cursor-pointer" data-testid="button-search">
                 <Search className="h-5 w-5 text-muted-foreground" />
@@ -108,6 +142,7 @@ export default function Navbar() {
           </nav>
 
           <div className="px-6 pb-8 space-y-3">
+            <MobileThemePicker />
             <Link to="/connect">
               <span className="block w-full text-center py-3 border border-border text-sm font-medium hover:bg-muted transition-colors cursor-pointer" onClick={closeMenu} data-testid="link-mobile-join">
                 Join as Pastor/Member

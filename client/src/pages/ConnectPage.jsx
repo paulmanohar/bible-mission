@@ -137,7 +137,7 @@ export default function ConnectPage() {
 
         {/* Forms Section */}
         <section className="py-20 bg-background">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
               
               {/* Left - Info */}

@@ -4,10 +4,10 @@ import { Phone, Mail, MapPin, Facebook, Youtube, Instagram } from "lucide-react"
 export default function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12">
           <div className="space-y-4">
-            <h3 className="font-serif text-2xl font-bold" data-testid="text-footer-brand">Bible Mission</h3>
+            <h3 className="font-serif text-xl md:text-2xl font-bold" data-testid="text-footer-brand">Bible Mission</h3>
             <p className="text-primary-foreground/80 text-sm leading-relaxed">
               A global religious organization with headquarters in Guntur, Andhra Pradesh. We are dedicated to spreading the teachings of our Spiritual Father M.Devadas Ayyagaru.
             </p>
@@ -52,7 +52,7 @@ export default function Footer() {
 
           <div className="space-y-4">
             <h4 className="font-serif text-lg font-semibold">Offerings</h4>
-            <div className="bg-white/10 p-4 rounded-lg space-y-2 text-sm text-primary-foreground/80">
+            <div className="bg-white/10 p-3 md:p-4 rounded-lg space-y-2 text-sm text-primary-foreground/80">
               <p className="font-medium text-white">Official Bank Details:</p>
               <p>Bank: State Bank of India</p>
               <p>A/C Name: Bible Mission</p>
@@ -65,7 +65,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-white/10 text-center text-sm text-primary-foreground/60">
+        <div className="mt-12 md:mt-16 pt-6 md:pt-8 border-t border-white/10 text-center text-sm text-primary-foreground/60">
           <p>&copy; {new Date().getFullYear()} Bible Mission. All rights reserved.</p>
         </div>
       </div>

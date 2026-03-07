@@ -79,7 +79,7 @@ export default function AdminLivestreamsPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Delete this livestream?")) return;
+    if (!confirm("Delete this broadcast?")) return;
     try {
       await adminApiService.adminDeleteLivestream(id);
       dispatch(fetchAdminLivestreams());
@@ -91,16 +91,16 @@ export default function AdminLivestreamsPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-slate-800" data-testid="text-admin-livestreams-title">Livestreams</h1>
+        <h1 className="text-2xl font-bold text-slate-800" data-testid="text-admin-livestreams-title">Broadcasts</h1>
         <button data-testid="button-add-livestream" onClick={openNew} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 text-sm">
-          Add New Livestream
+          Add New Broadcast
         </button>
       </div>
 
       {showForm && (
         <div className="bg-white rounded-lg shadow-sm border border-slate-200 p-6 mb-6">
           <h2 className="text-lg font-semibold mb-4" data-testid="text-livestream-form-title">
-            {editId ? "Edit Livestream" : "New Livestream"}
+            {editId ? "Edit Broadcast" : "New Broadcast"}
           </h2>
           <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -189,7 +189,7 @@ export default function AdminLivestreamsPage() {
               </tr>
             ))}
             {!loading && items.livestreams.length === 0 && (
-              <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400">No livestreams found</td></tr>
+              <tr><td colSpan={6} className="px-4 py-8 text-center text-slate-400">No broadcasts found</td></tr>
             )}
           </tbody>
         </table>

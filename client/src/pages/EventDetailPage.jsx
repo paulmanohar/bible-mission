@@ -30,7 +30,7 @@ export default function EventDetailPage() {
       <>
         <Navbar />
         <main className="min-h-screen bg-background pt-4">
-          <div className="container mx-auto px-4 py-16 max-w-3xl">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 max-w-3xl">
             <div className="animate-pulse space-y-6">
               <div className="h-6 bg-muted rounded w-24" />
               <div className="h-10 bg-muted rounded w-3/4" />
@@ -48,7 +48,7 @@ export default function EventDetailPage() {
       <>
         <Navbar />
         <main className="min-h-screen bg-background pt-4">
-          <div className="container mx-auto px-4 py-16 text-center">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-16 text-center">
             <h1 className="text-2xl font-serif font-bold mb-4">Event Not Found</h1>
             <p className="text-muted-foreground mb-8">{error || "This event could not be found."}</p>
             <Link to="/meetings" className="text-primary font-medium hover:underline">Back to Meetings</Link>
@@ -63,13 +63,13 @@ export default function EventDetailPage() {
     <>
       <Navbar />
       <main className="min-h-screen bg-background pt-4">
-        <div className="container mx-auto px-4 py-12 max-w-3xl">
-          <Link to="/meetings" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8" data-testid="link-back-meetings">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 max-w-3xl">
+          <Link to="/meetings" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 md:mb-8" data-testid="link-back-meetings">
             <ArrowLeft className="h-4 w-4" /> Back to Meetings
           </Link>
 
-          <div className="border p-8 md:p-12 mb-8">
-            <h1 className="text-3xl md:text-4xl font-serif font-bold mb-6" data-testid="text-event-title">{event.title}</h1>
+          <div className="border p-5 sm:p-6 md:p-8 lg:p-12 mb-6 md:mb-8">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif font-bold mb-4 md:mb-6" data-testid="text-event-title">{event.title}</h1>
 
             <div className="space-y-4 text-muted-foreground mb-8">
               <div className="flex items-center gap-3">

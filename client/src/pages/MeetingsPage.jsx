@@ -120,7 +120,7 @@ export default function MeetingsPage() {
 
         {/* Events Grid */}
         <section className="py-20 bg-background">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-6 border-b pb-6">
               <div>
                 <h2 className="text-3xl font-serif font-bold mb-2">All Upcoming Events</h2>
@@ -217,7 +217,7 @@ export default function MeetingsPage() {
 
         {/* Submit Event CTA */}
         <section className="py-16 bg-muted/30 border-t">
-          <div className="container mx-auto px-4">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row items-center justify-between gap-8 max-w-4xl mx-auto">
               <div>
                 <h3 className="font-serif text-2xl font-bold mb-2">Hosting a Meeting?</h3>
