@@ -29,6 +29,8 @@ export const books = mysqlTable("books", {
   description: text("description"),
   coverImage: text("cover_image"),
   contentUrl: text("content_url"),
+  sourceUrl: text("source_url"),
+  sourceType: varchar("source_type", { length: 50 }).default("pdf"),
   tags: json("tags").$type<string[]>(),
 });
 
@@ -44,6 +46,8 @@ export const events = mysqlTable("events", {
   pastorName: varchar("pastor_name", { length: 255 }),
   posterImage: text("poster_image"),
   approved: boolean("approved").notNull().default(false),
+  sourceUrl: text("source_url"),
+  sourceType: varchar("source_type", { length: 50 }).default("image"),
   tags: json("tags").$type<string[]>(),
 });
 
@@ -67,6 +71,8 @@ export const blogPosts = mysqlTable("blog_posts", {
   author: varchar("author", { length: 255 }).notNull().default("Bible Mission"),
   category: varchar("category", { length: 255 }).notNull().default("Devotional"),
   published: boolean("published").notNull().default(false),
+  sourceUrl: text("source_url"),
+  sourceType: varchar("source_type", { length: 50 }).default("text"),
   tags: json("tags").$type<string[]>(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });
@@ -79,6 +85,8 @@ export const podcasts = mysqlTable("podcasts", {
   duration: varchar("duration", { length: 50 }),
   episodeNumber: int("episode_number"),
   published: boolean("published").notNull().default(false),
+  sourceUrl: text("source_url"),
+  sourceType: varchar("source_type", { length: 50 }).default("audio"),
   tags: json("tags").$type<string[]>(),
   category: varchar("category", { length: 255 }).default("Podcast"),
   createdAt: timestamp("created_at").notNull().defaultNow(),
@@ -92,6 +100,8 @@ export const livestreams = mysqlTable("livestreams", {
   scheduledAt: varchar("scheduled_at", { length: 100 }),
   isLive: boolean("is_live").notNull().default(false),
   pastorName: varchar("pastor_name", { length: 255 }),
+  sourceUrl: text("source_url"),
+  sourceType: varchar("source_type", { length: 50 }).default("video"),
   tags: json("tags").$type<string[]>(),
   category: varchar("category", { length: 255 }).default("Livestream"),
 });

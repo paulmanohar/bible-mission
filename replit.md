@@ -123,6 +123,17 @@ shared/
 - Cards are clickable on: image, title, description, and action buttons
 - Search results also link to detail pages (except Livestream which has no detail page)
 
+## Media Components
+- `client/src/components/media/` contains 4 media viewers + a switcher:
+  - `PdfViewer.jsx` - Interactive PDF viewer (iframe-based) with download and fullscreen
+  - `ImageViewer.jsx` - Image viewer with zoom in/out, rotate, reset, and fullscreen modal
+  - `VideoPlayer.jsx` - Video player with custom controls, PiP mode; auto-detects YouTube URLs for embed
+  - `AudioPlayer.jsx` - Styled audio player with play/pause, skip 15s, seek bar, mute
+  - `MediaRenderer.jsx` - Switcher component that picks the right viewer based on `sourceType`
+- Schema fields: `sourceUrl` (the media URL) and `sourceType` (pdf|image|video|audio|text)
+- Tables with source fields: books, blogPosts, podcasts, livestreams, events
+- Each detail page renders MediaRenderer when `sourceUrl` is present
+
 ## Key Features
 - Book search in both English and Telugu
 - Upcoming meetings with pin locations and Google Maps links

@@ -4,6 +4,7 @@ import { ArrowLeft, BookOpen, User, Globe } from "lucide-react";
 import { apiService } from "../services/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import MediaRenderer from "../components/media/MediaRenderer";
 
 export default function BookDetailPage() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export default function BookDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-background pt-20">
+        <main className="min-h-screen bg-background pt-4">
           <div className="container mx-auto px-4 py-16">
             <div className="animate-pulse max-w-4xl mx-auto">
               <div className="h-6 bg-muted rounded w-24 mb-8" />
@@ -47,7 +48,7 @@ export default function BookDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-background pt-20">
+        <main className="min-h-screen bg-background pt-4">
           <div className="container mx-auto px-4 py-16 text-center">
             <h1 className="text-2xl font-serif font-bold mb-4">Book Not Found</h1>
             <p className="text-muted-foreground mb-8">{error || "This book could not be found."}</p>
@@ -62,7 +63,7 @@ export default function BookDetailPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background pt-20">
+      <main className="min-h-screen bg-background pt-4">
         <div className="container mx-auto px-4 py-12">
           <Link to="/resources" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8" data-testid="link-back-resources">
             <ArrowLeft className="h-4 w-4" /> Back to Resources
@@ -120,7 +121,7 @@ export default function BookDetailPage() {
                   </div>
                 )}
 
-                {book.contentUrl && (
+                {book.contentUrl && !book.sourceUrl && (
                   <a
                     href={book.contentUrl}
                     target="_blank"
@@ -133,6 +134,16 @@ export default function BookDetailPage() {
                 )}
               </div>
             </div>
+
+            {book.sourceUrl && (
+              <div className="mt-10">
+                <MediaRenderer
+                  sourceUrl={book.sourceUrl}
+                  sourceType={book.sourceType || "pdf"}
+                  title={book.title}
+                />
+              </div>
+            )}
           </div>
         </div>
       </main>

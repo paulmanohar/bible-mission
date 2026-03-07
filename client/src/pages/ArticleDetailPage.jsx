@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, User } from "lucide-react";
 import { apiService } from "../services/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import MediaRenderer from "../components/media/MediaRenderer";
 
 export default function ArticleDetailPage() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export default function ArticleDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-background pt-20">
+        <main className="min-h-screen bg-background pt-4">
           <div className="container mx-auto px-4 py-16 max-w-3xl">
             <div className="animate-pulse space-y-6">
               <div className="h-6 bg-muted rounded w-24" />
@@ -42,7 +43,7 @@ export default function ArticleDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-background pt-20">
+        <main className="min-h-screen bg-background pt-4">
           <div className="container mx-auto px-4 py-16 text-center">
             <h1 className="text-2xl font-serif font-bold mb-4">Article Not Found</h1>
             <p className="text-muted-foreground mb-8">{error || "This article could not be found."}</p>
@@ -57,7 +58,7 @@ export default function ArticleDetailPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background pt-20">
+      <main className="min-h-screen bg-background pt-4">
         <div className="container mx-auto px-4 py-12 max-w-3xl">
           <Link to="/resources" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8" data-testid="link-back-resources">
             <ArrowLeft className="h-4 w-4" /> Back to Resources
@@ -80,6 +81,17 @@ export default function ArticleDetailPage() {
                 </span>
               )}
             </div>
+
+            {post.sourceUrl && (
+              <div className="mb-8">
+                <MediaRenderer
+                  sourceUrl={post.sourceUrl}
+                  sourceType={post.sourceType || "text"}
+                  title={post.title}
+                  subtitle={post.author}
+                />
+              </div>
+            )}
 
             <div className="prose prose-lg max-w-none" data-testid="text-article-content">
               {post.content.split("\n").map((paragraph, i) => (

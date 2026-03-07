@@ -4,6 +4,7 @@ import { ArrowLeft, Mic, Play, Clock } from "lucide-react";
 import { apiService } from "../services/api";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import MediaRenderer from "../components/media/MediaRenderer";
 
 export default function PodcastDetailPage() {
   const { id } = useParams();
@@ -23,7 +24,7 @@ export default function PodcastDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-background pt-20">
+        <main className="min-h-screen bg-background pt-4">
           <div className="container mx-auto px-4 py-16 max-w-3xl">
             <div className="animate-pulse space-y-6">
               <div className="h-6 bg-muted rounded w-24" />
@@ -41,7 +42,7 @@ export default function PodcastDetailPage() {
     return (
       <>
         <Navbar />
-        <main className="min-h-screen bg-background pt-20">
+        <main className="min-h-screen bg-background pt-4">
           <div className="container mx-auto px-4 py-16 text-center">
             <h1 className="text-2xl font-serif font-bold mb-4">Podcast Not Found</h1>
             <p className="text-muted-foreground mb-8">{error || "This podcast episode could not be found."}</p>
@@ -56,7 +57,7 @@ export default function PodcastDetailPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-background pt-20">
+      <main className="min-h-screen bg-background pt-4">
         <div className="container mx-auto px-4 py-12 max-w-3xl">
           <Link to="/resources" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8" data-testid="link-back-resources">
             <ArrowLeft className="h-4 w-4" /> Back to Resources
@@ -84,15 +85,29 @@ export default function PodcastDetailPage() {
               {podcast.category && <span>{podcast.category}</span>}
             </div>
 
-            {podcast.audioUrl && (
+            {podcast.sourceUrl && (
               <div className="mt-8">
-                <audio controls className="w-full" data-testid="audio-podcast-player">
-                  <source src={podcast.audioUrl} />
-                </audio>
+                <MediaRenderer
+                  sourceUrl={podcast.sourceUrl}
+                  sourceType={podcast.sourceType || "audio"}
+                  title={podcast.title}
+                  subtitle={`Episode ${podcast.episodeNumber || ""} · ${podcast.duration || ""}`}
+                />
               </div>
             )}
 
-            {!podcast.audioUrl && (
+            {!podcast.sourceUrl && podcast.audioUrl && (
+              <div className="mt-8">
+                <MediaRenderer
+                  sourceUrl={podcast.audioUrl}
+                  sourceType="audio"
+                  title={podcast.title}
+                  subtitle={`Episode ${podcast.episodeNumber || ""} · ${podcast.duration || ""}`}
+                />
+              </div>
+            )}
+
+            {!podcast.sourceUrl && !podcast.audioUrl && (
               <button className="mt-8 inline-flex items-center gap-2 h-12 px-8 bg-white text-primary font-medium hover:bg-white/90 transition-colors" data-testid="button-play-podcast">
                 <Play className="h-4 w-4" /> Play Episode
               </button>
